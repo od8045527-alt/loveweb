@@ -4,9 +4,9 @@ index.html
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Para mi persona favorita 🌸</title>
+    <title>Jardín de Amor Infinito 🌸</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
@@ -14,195 +14,201 @@ index.html
             --rosa-pastel: #ffe5ec;
             --rosa-fuerte: #fb6f92;
             --texto: #4a4a4a;
-            --blanco-card: rgba(255, 255, 255, 0.92);
-        }
-
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(180deg, #ffe5ec 0%, #ffc2d1 100%);
+            margin: 0; padding: 0; height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            background: radial-gradient(circle, #fff0f3 0%, #ffc2d1 100%);
             font-family: 'Quicksand', sans-serif;
-            overflow: hidden;
-            position: relative;
+            overflow: hidden; touch-action: manipulation;
         }
 
-        /* Pétalos flotantes */
-        .flower {
-            position: absolute;
-            pointer-events: none;
-            z-index: 1;
-            opacity: 0.6;
-            animation: float 8s linear infinite;
+        /* Stats */
+        .stats {
+            position: absolute; top: 20px;
+            display: flex; gap: 15px; z-index: 20;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 8px 18px; border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(251, 111, 146, 0.15);
         }
+        .stat-item { font-weight: 700; color: var(--rosa-fuerte); font-size: 0.85rem; }
 
-        @keyframes float {
-            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.6; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
-        }
-
+        /* Card */
         .card {
-            background: var(--blanco-card);
-            padding: 30px 20px;
-            border-radius: 30px;
-            text-align: center;
-            width: 90%; /* Ancho ideal para teléfonos */
-            max-width: 350px;
-            z-index: 10;
-            box-shadow: 0 15px 35px rgba(251, 111, 146, 0.2);
-            border: 1.5px solid white;
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.96);
+            padding: 25px; border-radius: 40px;
+            text-align: center; width: 88%; max-width: 350px;
+            z-index: 10; border: 2px solid white;
+            box-shadow: 0 20px 40px rgba(251, 111, 146, 0.2);
+            transition: transform 0.3s ease;
         }
 
-        h1 {
-            font-family: 'Dancing Script', cursive;
-            color: var(--rosa-fuerte);
-            font-size: 2.2rem;
-            margin: 0 0 15px 0;
-        }
+        #level-tag { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: #fb6f92; font-weight: 700; opacity: 0.7; }
+        h1 { font-family: 'Dancing Script', cursive; color: var(--rosa-fuerte); font-size: 2.2rem; margin: 10px 0; }
 
-        .message-box {
-            min-height: 150px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
+        /* Barra de Progreso */
+        .progress-outer { width: 100%; height: 12px; background: #f0f0f0; border-radius: 10px; margin: 15px 0; overflow: hidden; border: 1px solid #ffe5ec; }
+        .progress-inner { width: 0%; height: 100%; background: linear-gradient(90deg, #fb6f92, #ff8fab); transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
-        #mensaje {
-            color: var(--texto);
-            transition: all 0.4s ease;
-            margin: 0;
-            width: 100%;
-        }
-
-        /* Estilos adaptados para móvil */
-        .frase-corta {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--rosa-fuerte);
-            line-height: 1.3;
-        }
-
-        .frase-larga {
-            font-size: 1.05rem;
-            font-weight: 500;
-            line-height: 1.5;
-            font-style: italic;
-        }
+        .message-box { min-height: 120px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; }
+        #mensaje { color: var(--texto); transition: all 0.3s ease; font-size: 1.1rem; line-height: 1.4; }
 
         .btn-love {
-            background-color: var(--rosa-fuerte);
-            color: white;
-            border: none;
-            width: 100%; /* Botón más fácil de pulsar en móvil */
-            padding: 18px;
-            font-size: 1rem;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 700;
-            letter-spacing: 1px;
-            box-shadow: 0 6px 15px rgba(251, 111, 146, 0.3);
-            transition: transform 0.2s active;
+            background: linear-gradient(45deg, var(--rosa-fuerte), #ff8fab);
+            color: white; border: none; width: 100%;
+            padding: 18px; font-size: 1.1rem; border-radius: 25px;
+            cursor: pointer; font-weight: 700;
+            box-shadow: 0 8px 15px rgba(251, 111, 146, 0.3);
+        }
+        .btn-love:active { transform: scale(0.95); }
+
+        /* ANIMACIÓN GRAN CORAZÓN */
+        #heart-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            pointer-events: none; z-index: 100; opacity: 0;
+        }
+        .big-heart { font-size: 150px; filter: drop-shadow(0 0 20px rgba(251, 111, 146, 0.5)); }
+        
+        .pop-heart { animation: heartPop 1.2s ease-out forwards; }
+        @keyframes heartPop {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.5); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
         }
 
-        .btn-love:active {
-            transform: scale(0.96);
-            background-color: #f25c7e;
+        /* Pétalos */
+        .flower { position: absolute; pointer-events: none; z-index: 1; animation: floatUp 8s linear forwards; }
+        @keyframes floatUp {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.7; }
+            100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
-    <div id="garden"></div>
+    <div class="stats">
+        <div class="stat-item">🌸 Flores: <span id="count">0</span></div>
+        <div class="stat-item">💖 Nivel: <span id="level-name">Cariño</span></div>
+    </div>
+
+    <div id="heart-overlay"><span class="big-heart">❤️</span></div>
 
     <div class="card">
-        <h1>Para ti...</h1>
-        <div class="message-box">
-            <p id="mensaje" class="frase-larga">Toca el botón para florecer un pensamiento ✨</p>
+        <div id="level-tag">Pensamientos para ti</div>
+        <h1 id="title">Click de Amor</h1>
+        
+        <div class="progress-outer">
+            <div class="progress-inner" id="bar"></div>
         </div>
+
+        <div class="message-box">
+            <p id="mensaje">Cada vez que llenes la barra, recibirás un corazón especial... ❤️</p>
+        </div>
+
         <button class="btn-love" id="magicBtn">DESCUBRIR 🌸</button>
     </div>
 
-    <script>
-        const frasesCortas = [
-            "Eres mi persona favorita. ❤️",
-            "Me encantas. Así de simple.",
-            "Eres pura magia. ✨",
-            "Contigo siempre. 🌷",
-            "Mi lugar favorito eres tú.",
-            "Gracias por existir. 🥰",
-            "Eres calma en el caos. ❤️",
-            "Te quiero muchísimo 💖",
-            "Eres mi mejor coincidencia.",
-            "Sonrío porque estás tú. 😊"
-        ];
+    <div id="garden"></div>
 
-        const frasesLargas = [
-            "No tienes idea de lo mucho que me gusta hablar contigo y cómo logras hacerme sonreír.",
-            "A veces me quedo pensando en lo increíble que eres y en la suerte que tuve de encontrarte.",
-            "Me encanta descubrir cosas nuevas de ti, desde tus gustos más pequeños hasta tu forma de ser.",
-            "Si pudiera definir la felicidad en una sola palabra, sin duda escribiría tu nombre.",
-            "Me gusta cómo somos cuando estamos juntos; me haces sentir que puedo ser yo mismo.",
-            "Gracias por compartir tu tiempo conmigo y por iluminar mis días con tu presencia."
+    <script>
+        let clicks = 0;
+        let totalClicksEver = 0;
+        const clicksToFill = 7; // Cuántos clicks para llenar la barra
+
+        const frases = [
+            "Eres mi persona favorita. ❤️",
+            "Me encantas, así de simple. 😊",
+            "Eres pura magia. ✨",
+            "Contigo todo es mejor. 🌷",
+            "Mi lugar favorito eres tú. 📍",
+            "Gracias por existir. 🥰",
+            "Eres calma en mi caos. ❤️",
+            "Te quiero muchísimo. 💖",
+            "Eres mi mejor coincidencia. 🌠",
+            "Sonrío al pensarte. 😊",
+            "Eres el detalle más lindo. 🌸",
+            "Me haces muy feliz. 💓"
         ];
 
         const btn = document.getElementById('magicBtn');
         const text = document.getElementById('mensaje');
+        const countDisplay = document.getElementById('count');
+        const bar = document.getElementById('bar');
+        const heartOverlay = document.getElementById('heart-overlay');
+        const levelName = document.getElementById('level-name');
 
         btn.addEventListener('click', () => {
-            // Confeti optimizado para móvil
+            clicks++;
+            totalClicksEver++;
+            
+            // Actualizar interfaz
+            countDisplay.textContent = totalClicksEver;
+            
+            // Calcular progreso (0 a 100)
+            let progress = (clicks / clicksToFill) * 100;
+            bar.style.width = progress + "%";
+
+            // Efecto Confeti pequeño
             confetti({
-                particleCount: 60,
+                particleCount: 30,
                 spread: 50,
-                origin: { y: 0.7 },
-                colors: ['#ffb3c1', '#fb6f92', '#ffffff']
+                origin: { y: 0.8 },
+                colors: ['#fb6f92', '#ffffff']
             });
 
+            // Cambiar mensaje
             text.style.opacity = 0;
-
             setTimeout(() => {
-                const tipo = Math.random() > 0.4 ? 'corta' : 'larga';
-                
-                if (tipo === 'corta') {
-                    text.textContent = frasesCortas[Math.floor(Math.random() * frasesCortas.length)];
-                    text.className = 'frase-corta';
-                } else {
-                    text.textContent = frasesLargas[Math.floor(Math.random() * frasesLargas.length)];
-                    text.className = 'frase-larga';
-                }
-
+                text.textContent = frases[Math.floor(Math.random() * frases.length)];
                 text.style.opacity = 1;
-                btn.textContent = "OTRO MÁS ✨";
-            }, 300);
+            }, 200);
+
+            // ¿Barra llena?
+            if (clicks >= clicksToFill) {
+                showHeartAnimation();
+            }
         });
 
-        // Generar pétalos de fondo
-        const garden = document.getElementById('garden');
-        const symbols = ['💖', '🌷', '🌸', '✨'];
-        
-        function addFlower() {
+        function showHeartAnimation() {
+            // 1. Mostrar corazón gigante
+            heartOverlay.classList.remove('pop-heart');
+            void heartOverlay.offsetWidth; // Truco para reiniciar animación
+            heartOverlay.classList.add('pop-heart');
+
+            // 2. Confeti grande
+            confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: { y: 0.6 },
+                colors: ['#ff0000', '#fb6f92', '#ffffff']
+            });
+
+            // 3. Reiniciar barra y clicks locales
+            setTimeout(() => {
+                clicks = 0;
+                bar.style.width = "0%";
+                // Cambiar nivel aleatoriamente para que se vea didáctico
+                const niveles = ["Adoración", "Pasión", "Ternura", "Infinito"];
+                levelName.textContent = niveles[Math.floor(Math.random() * niveles.length)];
+            }, 1000);
+        }
+
+        // Sistema de pétalos flotantes
+        function createFlower() {
+            const symbols = ['🌸', '✨', '💖', '🌷'];
             const f = document.createElement('div');
             f.className = 'flower';
             f.textContent = symbols[Math.floor(Math.random() * symbols.length)];
             f.style.left = Math.random() * 95 + 'vw';
-            f.style.animationDuration = (Math.random() * 3 + 5) + 's';
-            f.style.fontSize = (Math.random() * 10 + 15) + 'px';
-            garden.appendChild(f);
+            f.style.bottom = "-50px";
+            f.style.fontSize = (Math.random() * 15 + 15) + 'px';
+            document.getElementById('garden').appendChild(f);
             setTimeout(() => f.remove(), 8000);
         }
-
-        setInterval(addFlower, 1000);
+        setInterval(createFlower, 1000);
     </script>
 </body>
 </html>
