@@ -1,0 +1,204 @@
+index.html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para mi persona favorita 🌸</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --rosa-pastel: #ffe5ec;
+            --rosa-fuerte: #fb6f92;
+            --texto: #5c5c5c;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--rosa-pastel);
+            font-family: 'Quicksand', sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .flower {
+            position: absolute;
+            font-size: 25px;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.5;
+            animation: float 12s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(110vh) rotate(0deg); }
+            100% { transform: translateY(-10vh) rotate(360deg); }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 30px;
+            border-radius: 40px;
+            text-align: center;
+            max-width: 400px;
+            width: 85%;
+            z-index: 10;
+            box-shadow: 0 15px 35px rgba(251, 111, 146, 0.1);
+            border: 2px solid white;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            color: var(--rosa-fuerte);
+            font-size: 2.5rem;
+            margin: 0 0 15px 0;
+        }
+
+        .message-box {
+            min-height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #mensaje {
+            color: var(--texto);
+            transition: all 0.4s ease;
+            margin: 0;
+        }
+
+        /* Estilo para frases cortas (Impacto) */
+        .frase-corta {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--rosa-fuerte);
+        }
+
+        /* Estilo para frases largas (Profundas) */
+        .frase-larga {
+            font-size: 1.1rem;
+            font-weight: 400;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .btn-love {
+            background-color: var(--rosa-fuerte);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(251, 111, 146, 0.3);
+            margin-top: 15px;
+        }
+
+        .btn-love:hover {
+            transform: scale(1.05);
+            background-color: #f25c7e;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="garden"></div>
+
+    <div class="card">
+        <h1>Para ti...</h1>
+        <div class="message-box">
+            <p id="mensaje">Haz clic para florecer un pensamiento ✨</p>
+        </div>
+        <button class="btn-love" id="magicBtn">DESCUBRIR 🌸</button>
+    </div>
+
+    <script>
+        // --- BASE DE DATOS DE FRASES INFINITAS ---
+        const frasesCortas = [
+            "Eres mi persona favorita. ❤️",
+            "Me encantas. Así de simple.",
+            "Eres pura magia. ✨",
+            "Contigo siempre. 🌷",
+            "Mi lugar favorito eres tú.",
+            "Eres el tulipán más lindo.",
+            "Gracias por existir. 🥰",
+            "Te pienso a cada rato.",
+            "Eres mi mejor coincidencia.",
+            "Eres ese detalle bonito que la vida me regaló sin avisar.",
+            "Contigo, todo se siente un poco más correcto.",
+            "Eres calma en medio del caos.❤️",
+            "Sonrío sin razón… y luego recuerdo que eres tú.❤️",
+            "Me gustas de una forma tranquila, de esas que no se fuerzan y se sienten bien.",
+            "Sin buscarlo, te volviste importante.💕",
+            "Te quiero 💖",
+            "Me gustas 💕"
+
+        ];
+
+        const frasesLargas = [
+            "No tienes idea de lo mucho que me gusta hablar contigo y cómo logras hacerme sonreír incluso en los días más grises.",
+            "A veces me quedo pensando en lo increíble que eres y en la suerte que tuve de que cruzáramos caminos en este mundo tan grande.",
+            "Me encanta descubrir cosas nuevas de ti, desde tus gustos más pequeños hasta la forma en la que ves la vida.",
+            "Si pudiera definir la felicidad en una sola palabra, sin duda alguna escribiría tu nombre una y otra vez.",
+            "Me gusta cómo somos cuando estamos juntos; me haces sentir que puedo ser yo mismo sin miedo a nada.",
+            "Gracias por compartir tu tiempo conmigo, por tus risas y por ser esa persona que ilumina todo a su alrededor."
+        ];
+
+        const btn = document.getElementById('magicBtn');
+        const text = document.getElementById('mensaje');
+
+        // Función para cambiar frases infinitamente
+        btn.addEventListener('click', () => {
+            // Efecto Confeti
+            confetti({
+                particleCount: 70,
+                spread: 60,
+                origin: { y: 0.6 },
+                colors: ['#ffb3c1', '#fb6f92', '#ffffff']
+            });
+
+            text.style.opacity = 0;
+
+            setTimeout(() => {
+                // Alternar entre corta y larga (50/50 de probabilidad)
+                const tipo = Math.random() > 0.5 ? 'corta' : 'larga';
+                let seleccionada;
+
+                if (tipo === 'corta') {
+                    seleccionada = frasesCortas[Math.floor(Math.random() * frasesCortas.length)];
+                    text.className = 'frase-corta';
+                } else {
+                    seleccionada = frasesLargas[Math.floor(Math.random() * frasesLargas.length)];
+                    text.className = 'frase-larga';
+                }
+
+                text.textContent = seleccionada;
+                text.style.opacity = 1;
+            }, 300);
+        });
+
+        // Fondo de flores
+        const garden = document.getElementById('garden');
+        const symbols = ['💖', '🌷', '🌸', '🌻', '✨'];
+        for (let i = 0; i < 15; i++) {
+            let f = document.createElement('div');
+            f.className = 'flower';
+            f.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+            f.style.left = Math.random() * 100 + 'vw';
+            f.style.animationDelay = Math.random() * 10 + 's';
+            f.style.fontSize = (Math.random() * 15 + 20) + 'px';
+            garden.appendChild(f);
+        }
+    </script>
+</body>
+</html>
