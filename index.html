@@ -3,322 +3,550 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>¿Dudas cuánto me gustas? ❤️</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,500&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Para ti ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(circle at 50% 20%, #26101b 0%, #090507 100%);
-            color: #fff;
-            overflow-x: hidden;
+        :root {
+            --primary: #c93b5b;
+            --primary-light: #f3c6d0;
+            --envelope-front: #fce4ec;
+            --envelope-flap: #f8bbd0;
+            --envelope-shadow: rgba(201, 59, 91, 0.18);
+            --bg-center: #ffffff;
+            --bg-edge: #f9eef1;
+            --text-dark: #4a2c33;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
             user-select: none;
-            -webkit-user-select: none;
-        }
-        .serif { font-family: 'Cormorant Garamond', serif; }
-        
-        /* Efecto cristal */
-        .glass {
-            background: rgba(255, 255, 255, 0.04);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(244, 63, 94, 0.2);
         }
 
-        /* Animación de pulso para el escáner */
-        @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 0 20px rgba(244, 63, 94, 0.3); }
-            50% { box-shadow: 0 0 45px rgba(244, 63, 94, 0.7); }
-        }
-        .scanner-btn {
-            animation: pulseGlow 2s infinite;
-            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        .scanner-btn:active {
-            transform: scale(0.92);
-        }
-
-        /* Estilo personalizado del slider */
-        input[type=range] {
-            -webkit-appearance: none;
-            background: transparent;
-        }
-        input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            height: 28px;
-            width: 28px;
-            border-radius: 50%;
-            background: #f43f5e;
-            cursor: pointer;
-            margin-top: -10px;
-            box-shadow: 0 0 15px rgba(244, 63, 94, 0.8);
-        }
-        input[type=range]::-webkit-slider-runnable-track {
-            width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 999px;
-        }
-
-        /* Transiciones entre pantallas */
-        .step-section {
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-        .hidden-step {
-            display: none;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        .active-step {
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background: radial-gradient(circle at center, var(--bg-center) 0%, var(--bg-edge) 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
             display: flex;
-            opacity: 1;
-            transform: translateY(0);
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
         }
 
-        /* Estrella brillante */
-        .star-node {
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        /* Pétalos y corazones flotantes de fondo */
+        .floating-particles {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
         }
-        .star-node.lit {
-            background-color: #f43f5e;
-            box-shadow: 0 0 20px #f43f5e, 0 0 40px #fb7185;
-            transform: scale(1.3);
+
+        .petal {
+            position: absolute;
+            top: -30px;
+            color: var(--primary);
+            opacity: 0.45;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh) rotate(0deg) translateX(0);
+                opacity: 0;
+            }
+            15% { opacity: 0.55; }
+            85% { opacity: 0.45; }
+            100% {
+                transform: translateY(110vh) rotate(360deg) translateX(25px);
+                opacity: 0;
+            }
+        }
+
+        /* Contenedor de pantallas */
+        .screen {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            z-index: 10;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.96);
+        }
+
+        /* Tipografía caligráfica */
+        .script-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(2.8rem, 8vw, 4.2rem);
+            color: var(--primary);
+            font-weight: 400;
+            text-align: center;
+            line-height: 1.15;
+            text-shadow: 0 2px 10px rgba(201, 59, 91, 0.12);
+        }
+
+        .subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: #9e6b77;
+            margin-top: 6px;
+            margin-bottom: 34px;
+            text-align: center;
+        }
+
+        /* --- PANTALLA 1: ESCÁNER DE HUELLA --- */
+        .fingerprint-wrapper {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 26px 0 22px;
+            cursor: pointer;
+        }
+
+        .progress-ring {
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-bg {
+            fill: rgba(255, 255, 255, 0.85);
+            stroke: rgba(201, 59, 91, 0.12);
+            stroke-width: 3.5;
+            filter: drop-shadow(0 8px 20px rgba(201, 59, 91, 0.12));
+        }
+
+        .progress-ring-fill {
+            fill: transparent;
+            stroke: var(--primary);
+            stroke-width: 3.5;
+            stroke-linecap: round;
+            stroke-dasharray: 377;
+            stroke-dashoffset: 377;
+            transition: stroke-dashoffset 0.08s linear;
+        }
+
+        .fingerprint-svg {
+            width: 68px;
+            height: 68px;
+            fill: none;
+            stroke: var(--primary);
+            stroke-width: 2.2;
+            stroke-linecap: round;
+            z-index: 2;
+            transition: transform 0.25s ease, filter 0.25s ease;
+        }
+
+        .fingerprint-wrapper.pressing .fingerprint-svg {
+            transform: scale(0.94);
+            filter: drop-shadow(0 0 8px rgba(201, 59, 91, 0.45));
+        }
+
+        .scan-hint {
+            font-style: italic;
+            font-size: 1.15rem;
+            color: #7c4d58;
+            min-height: 28px;
+            text-align: center;
+            transition: opacity 0.3s ease;
+        }
+
+        /* --- PANTALLA 2: EL SOBRE ROSA --- */
+        .envelope-container {
+            position: relative;
+            width: min(310px, 84vw);
+            height: 205px;
+            cursor: pointer;
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            margin-bottom: 24px;
+        }
+
+        .envelope-container:hover {
+            transform: translateY(-5px) scale(1.02);
+        }
+
+        .envelope-container:active {
+            transform: scale(0.97);
+        }
+
+        .envelope-body {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #fff0f5 0%, #fad2e0 100%);
+            border-radius: 8px;
+            box-shadow: 0 18px 40px var(--envelope-shadow), 0 2px 6px rgba(0,0,0,0.04);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        /* Pliegues laterales e inferior del sobre */
+        .envelope-body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                linear-gradient(33deg, rgba(244, 172, 196, 0.45) 49%, transparent 50.5%),
+                linear-gradient(-33deg, rgba(244, 172, 196, 0.45) 49%, transparent 50.5%);
+            z-index: 2;
+        }
+
+        /* Solapa superior triangular */
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 118px;
+            background: linear-gradient(180deg, #fce4ec 0%, #f5bfd2 100%);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            z-index: 3;
+            filter: drop-shadow(0 4px 6px rgba(168, 45, 74, 0.14));
+            transform-origin: top;
+            transition: transform 0.6s ease;
+        }
+
+        .envelope-container.opened .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        /* Sello de corazón en el centro */
+        .wax-seal {
+            position: absolute;
+            top: 52%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 34px;
+            height: 34px;
+            background: radial-gradient(circle at 30% 30%, #e04869, #b02342);
+            border-radius: 50%;
+            z-index: 4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 15px;
+            box-shadow: 0 4px 10px rgba(176, 35, 66, 0.35);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .envelope-container.opened .wax-seal {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.5);
+        }
+
+        /* --- MODAL DE LA CARTA ABIERTA --- */
+        .letter-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(74, 44, 51, 0.18);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 30;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .letter-overlay.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .letter-paper {
+            background: #fffdfd;
+            width: 100%;
+            max-width: 420px;
+            border-radius: 12px;
+            padding: 36px 28px 30px;
+            position: relative;
+            box-shadow: 0 25px 60px rgba(145, 38, 63, 0.22);
+            border: 1px solid rgba(201, 59, 91, 0.14);
+            transform: translateY(30px) scale(0.94);
+            transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+            text-align: center;
+        }
+
+        .letter-overlay.visible .letter-paper {
+            transform: translateY(0) scale(1);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid rgba(201, 59, 91, 0.2);
+            background: #fff;
+            color: var(--primary);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .close-btn:hover {
+            background: #fce4ec;
+        }
+
+        .letter-header {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 14px;
+        }
+
+        .letter-body {
+            font-size: 1.08rem;
+            line-height: 1.65;
+            color: #4f353b;
+            space-y: 12px;
+        }
+
+        .letter-body p {
+            margin-bottom: 13px;
+        }
+
+        .letter-signature {
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.9rem;
+            color: var(--primary);
+            margin-top: 18px;
+            text-align: right;
+            padding-right: 8px;
+        }
+
+        /* Canvas para confeti */
+        #confetti-canvas {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 40;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-5 relative">
+<body>
 
-    <!-- Indicador de progreso superior -->
-    <div class="fixed top-6 left-0 right-0 flex justify-center gap-2 z-20">
-        <div id="dot-1" class="w-8 h-1.5 rounded-full bg-rose-500 transition-all"></div>
-        <div id="dot-2" class="w-8 h-1.5 rounded-full bg-white/20 transition-all"></div>
-        <div id="dot-3" class="w-8 h-1.5 rounded-full bg-white/20 transition-all"></div>
-        <div id="dot-4" class="w-8 h-1.5 rounded-full bg-white/20 transition-all"></div>
+    <!-- Partículas flotantes -->
+    <div class="floating-particles" id="particles"></div>
+
+    <!-- Canvas de confeti al abrir la carta -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- PANTALLA 1: HUELLA DIGITAL -->
+    <section class="screen" id="screen-fingerprint">
+        <h1 class="script-title">Para ti - Me encantas</h1>
+        
+        <div class="fingerprint-wrapper" id="fp-btn">
+            <svg class="progress-ring" viewBox="0 0 140 140">
+                <circle class="progress-ring-bg" cx="70" cy="70" r="60" />
+                <circle class="progress-ring-fill" id="ring-fill" cx="70" cy="70" r="60" />
+            </svg>
+            <!-- Icono SVG de huella dactilar -->
+            <svg class="fingerprint-svg" viewBox="0 0 24 24">
+                <path d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" />
+            </svg>
+        </div>
+
+        <p class="scan-hint" id="scan-text">Mantén presionada la huella ♥</p>
+    </section>
+
+    <!-- PANTALLA 2: EL SOBRE -->
+    <section class="screen hidden" id="screen-envelope">
+        <h2 class="script-title">Un detalle para ti</h2>
+        <p class="subtitle">Por si alguna vez lo dudas</p>
+
+        <div class="envelope-container" id="envelope" onclick="openEnvelope()">
+            <div class="envelope-body"></div>
+            <div class="envelope-flap"></div>
+            <div class="wax-seal">♥</div>
+        </div>
+
+        <p class="scan-hint">Toca el sobre para abrir tu sorpresa</p>
+    </section>
+
+    <!-- CARTA DESPLEGABLE -->
+    <div class="letter-overlay" id="letter-modal">
+        <div class="letter-paper">
+            <button class="close-btn" onclick="closeEnvelope()" aria-label="Cerrar">✕</button>
+            <h3 class="letter-header">Para ti,</h3>
+            <div class="letter-body">
+                <p>No hace falta que sea una fecha especial para recordarte lo mucho que me gustas y lo bien que me haces sentir.</p>
+                <p>Si algún día llegas a dudarlo, solo abre este enlace y acuérdate de que eres mi persona favorita, la que me saca sonrisas sin intentarlo y con quien cualquier momento vale la pena.</p>
+                <p>Me encanta tu forma de ser, tu mirada y la paz que siento cada vez que estoy contigo.</p>
+            </div>
+            <div class="letter-signature">Con cariño, Ángel ♥</div>
+        </div>
     </div>
 
-    <!-- FASE 1: EL ESCÁNER DE PULSO -->
-    <section id="step-1" class="step-section active-step flex-col items-center text-center max-w-md w-full">
-        <span class="text-xs uppercase tracking-[0.25em] text-rose-400 mb-3">Diagnóstico Rápido</span>
-        <h1 class="serif text-4xl md:text-5xl font-semibold mb-4 leading-tight">¿En serio dudas cuánto me gustas?</h1>
-        <p class="text-sm text-gray-300 mb-10">Pon tu dedo en el corazón y mantenlo presionado para medirlo en tiempo real.</p>
-
-        <!-- Botón táctil -->
-        <div class="relative flex items-center justify-center mb-6">
-            <svg class="w-44 h-44 -rotate-90">
-                <circle cx="88" cy="88" r="78" stroke="rgba(255,255,255,0.1)" stroke-width="6" fill="transparent" />
-                <circle id="progress-ring" cx="88" cy="88" r="78" stroke="#f43f5e" stroke-width="6" fill="transparent"
-                    stroke-dasharray="490" stroke-dashoffset="490" stroke-linecap="round" />
-            </svg>
-            <button id="hold-btn" 
-                class="scanner-btn absolute w-32 h-32 rounded-full bg-gradient-to-tr from-rose-600 to-pink-500 flex flex-col items-center justify-center shadow-2xl cursor-pointer">
-                <span class="text-4xl mb-1" id="heart-emoji">❤️</span>
-                <span class="text-[10px] uppercase tracking-wider font-semibold" id="hold-label">Mantén aquí</span>
-            </button>
-        </div>
-
-        <p id="scan-status" class="text-sm font-medium text-rose-300 h-6">Esperando tu huella...</p>
-    </section>
-
-    <!-- FASE 2: EL MEDIDOR REBELDE -->
-    <section id="step-2" class="step-section hidden-step flex-col items-center text-center max-w-md w-full glass rounded-3xl p-8">
-        <span class="text-xs uppercase tracking-[0.25em] text-rose-400 mb-2">Prueba #2</span>
-        <h2 class="serif text-3xl md:text-4xl mb-3">Calcula el nivel</h2>
-        <p class="text-sm text-gray-300 mb-8">Desliza la barra hasta donde crees que llega lo que siento por ti.</p>
-
-        <div class="w-full mb-4">
-            <div class="flex justify-between text-xs text-gray-400 mb-2">
-                <span>Poquito</span>
-                <span id="slider-val" class="text-rose-400 font-bold text-base">50%</span>
-                <span>Mucho</span>
-            </div>
-            <input type="range" id="love-slider" min="0" max="100" value="50" class="w-full">
-        </div>
-
-        <p id="slider-feedback" class="text-sm italic text-rose-200 min-h-[3rem] flex items-center justify-center mb-6">
-            Mueve el círculo... a ver si le atinas.
-        </p>
-
-        <button id="next-to-3" onclick="goToStep(3)" class="hidden px-6 py-3 rounded-full bg-rose-600 hover:bg-rose-500 text-sm font-semibold transition-all shadow-lg">
-            Ok, te creo... Siguiente →
-        </button>
-    </section>
-
-    <!-- FASE 3: CONECTA LAS RAZONES (ESTRELLAS) -->
-    <section id="step-3" class="step-section hidden-step flex-col items-center text-center max-w-md w-full">
-        <span class="text-xs uppercase tracking-[0.25em] text-rose-400 mb-2">Prueba #3</span>
-        <h2 class="serif text-3xl md:text-4xl mb-2">Enciende cada estrella</h2>
-        <p class="text-sm text-gray-300 mb-6">Toca los 5 puntos para descubrir por qué no sales de mi cabeza.</p>
-
-        <!-- Constelación en forma de corazón -->
-        <div class="relative w-72 h-64 glass rounded-3xl mb-6 flex items-center justify-center">
-            <!-- Líneas SVG decorativas -->
-            <svg class="absolute inset-0 w-full h-full pointer-events-none opacity-30">
-                <polyline points="144,195 65,115 95,55 144,85 193,55 223,115 144,195" fill="none" stroke="#f43f5e" stroke-width="2" stroke-dasharray="4"/>
-            </svg>
-
-            <!-- 5 Estrellas interactivas -->
-            <button onclick="lightStar(0, this)" style="top: 22%; left: 28%;" class="star-node absolute w-9 h-9 rounded-full bg-white/15 border border-rose-300/40 flex items-center justify-center text-xs">✦</button>
-            <button onclick="lightStar(1, this)" style="top: 22%; right: 28%;" class="star-node absolute w-9 h-9 rounded-full bg-white/15 border border-rose-300/40 flex items-center justify-center text-xs">✦</button>
-            <button onclick="lightStar(2, this)" style="top: 45%; left: 16%;" class="star-node absolute w-9 h-9 rounded-full bg-white/15 border border-rose-300/40 flex items-center justify-center text-xs">✦</button>
-            <button onclick="lightStar(3, this)" style="top: 45%; right: 16%;" class="star-node absolute w-9 h-9 rounded-full bg-white/15 border border-rose-300/40 flex items-center justify-center text-xs">✦</button>
-            <button onclick="lightStar(4, this)" style="bottom: 18%; left: 43.5%;" class="star-node absolute w-9 h-9 rounded-full bg-white/15 border border-rose-300/40 flex items-center justify-center text-xs">✦</button>
-        </div>
-
-        <div class="glass rounded-2xl p-4 w-full min-h-[4.5rem] flex items-center justify-center mb-6">
-            <p id="star-message" class="serif italic text-xl text-rose-200">Toca cualquier estrella para empezar...</p>
-        </div>
-
-        <button id="next-to-4" onclick="goToStep(4)" class="hidden px-7 py-3 rounded-full bg-gradient-to-r from-rose-600 to-pink-600 text-sm font-semibold shadow-lg animate-bounce">
-            Ver veredicto final ❤️
-        </button>
-    </section>
-
-    <!-- FASE 4: VEREDICTO FINAL -->
-    <section id="step-4" class="step-section hidden-step flex-col items-center text-center max-w-md w-full glass rounded-3xl p-8">
-        <div class="w-16 h-16 rounded-full bg-rose-500/20 flex items-center justify-center text-3xl mb-4">
-            ✨
-        </div>
-        <span class="text-xs uppercase tracking-[0.25em] text-rose-400 mb-2">Resultado Oficial</span>
-        <h2 class="serif text-4xl font-semibold mb-4">Me encantas, y punto.</h2>
-        
-        <div class="text-sm text-gray-200 space-y-3 leading-relaxed mb-8 text-left bg-black/25 p-5 rounded-2xl border border-white/5">
-            <p>Si algún día vuelves a dudarlo, regresa a este link.</p>
-            <p>Me gustas por cómo eres, por la paz que me das cuando estoy contigo y porque haces que cualquier día normal se sienta increíble.</p>
-            <p class="text-rose-300 font-medium pt-1">No hay porcentaje ni barra que alcance para medirlo.</p>
-        </div>
-
-        <!-- Botón directo a tu WhatsApp -->
-        <a href="https://wa.me/525616083297?text=Ya%20abr%C3%AD%20el%20link...%20y%20t%C3%BA%20tambi%C3%A9n%20me%20gustas%20mucho%20%E2%9D%A4%EF%B8%8F" 
-           target="_blank"
-           class="w-full py-3.5 px-6 rounded-full bg-rose-600 hover:bg-rose-500 text-white font-semibold text-sm transition-all shadow-lg shadow-rose-900/50 flex items-center justify-center gap-2">
-            <span>Ya me quedó claro (Responder)</span>
-            <span>💌</span>
-        </a>
-    </section>
-
     <script>
-        // --- NAVEGACIÓN ENTRE FASES ---
-        function goToStep(stepNumber) {
-            document.querySelectorAll('.step-section').forEach(sec => {
-                sec.classList.remove('active-step');
-                sec.classList.add('hidden-step');
-            });
-            const target = document.getElementById(`step-${stepNumber}`);
-            target.classList.remove('hidden-step');
-            setTimeout(() => target.classList.add('active-step'), 20);
+        // 1. GENERADOR DE PÉTALOS/CORAZONES FLOTANTES
+        const particlesContainer = document.getElementById('particles');
+        const symbols = ['♥', '❀', '•'];
 
-            // Actualizar puntos superiores
-            for (let i = 1; i <= 4; i++) {
-                const dot = document.getElementById(`dot-${i}`);
-                if (i <= stepNumber) {
-                    dot.classList.remove('bg-white/20');
-                    dot.classList.add('bg-rose-500');
-                }
-            }
+        function spawnPetal() {
+            const el = document.createElement('span');
+            el.className = 'petal';
+            el.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+            el.style.left = Math.random() * 100 + 'vw';
+            el.style.fontSize = (Math.random() * 12 + 10) + 'px';
+            el.style.animationDuration = (Math.random() * 6 + 7) + 's';
+            particlesContainer.appendChild(el);
+            setTimeout(() => el.remove(), 13000);
         }
+        setInterval(spawnPetal, 450);
+        for (let i = 0; i < 12; i++) setTimeout(spawnPetal, i * 250);
 
-        // --- FASE 1: LÓGICA DEL ESCÁNER TÁCTIL ---
-        const holdBtn = document.getElementById('hold-btn');
-        const ring = document.getElementById('progress-ring');
-        const scanStatus = document.getElementById('scan-status');
-        const heartEmoji = document.getElementById('heart-emoji');
-        const circumference = 490;
+        // 2. LÓGICA DE LA HUELLA DIGITAL
+        const fpBtn = document.getElementById('fp-btn');
+        const ringFill = document.getElementById('ring-fill');
+        const scanText = document.getElementById('scan-text');
+        const circumference = 377; // 2 * PI * 60
         let progress = 0;
-        let holdInterval = null;
-        let scanCompleted = false;
+        let timer = null;
+        let unlocked = false;
 
-        function startHold(e) {
+        function startPress(e) {
             e.preventDefault();
-            if (scanCompleted) return;
-            scanStatus.innerText = "Analizando pulso...";
-            
-            holdInterval = setInterval(() => {
-                progress += 2.5;
+            if (unlocked) return;
+            fpBtn.classList.add('pressing');
+            scanText.innerText = "Verificando latidos...";
+
+            timer = setInterval(() => {
+                progress += 2.2;
                 const offset = circumference - (progress / 100) * circumference;
-                ring.style.strokeDashoffset = Math.max(offset, 0);
+                ringFill.style.strokeDashoffset = Math.max(offset, 0);
 
-                if (progress > 30 && progress < 70) {
-                    scanStatus.innerText = "Detectando nivel alto de cariño...";
-                    heartEmoji.style.transform = "scale(1.15)";
-                } else if (progress >= 70 && progress < 100) {
-                    scanStatus.innerText = "¡Advertencia! Nivel fuera de escala...";
-                    heartEmoji.style.transform = "scale(1.3)";
-                    if (navigator.vibrate) navigator.vibrate(40);
-                } else if (progress >= 100) {
-                    clearInterval(holdInterval);
-                    scanCompleted = true;
-                    scanStatus.innerText = "ERROR: Demasiado para medirlo 💥❤️";
-                    document.getElementById('hold-label').innerText = "¡Listo!";
-                    if (navigator.vibrate) navigator.vibrate([100, 50, 200]);
-                    setTimeout(() => goToStep(2), 1300);
+                if (progress > 55 && progress < 95) {
+                    scanText.innerText = "Casi listo...";
                 }
-            }, 50);
+
+                if (progress >= 100) {
+                    clearInterval(timer);
+                    unlocked = true;
+                    fpBtn.classList.remove('pressing');
+                    scanText.innerText = "Bienvenida, amor ♥";
+                    if (navigator.vibrate) navigator.vibrate([60, 40, 100]);
+
+                    setTimeout(() => {
+                        document.getElementById('screen-fingerprint').classList.add('hidden');
+                        document.getElementById('screen-envelope').classList.remove('hidden');
+                    }, 900);
+                }
+            }, 35);
         }
 
-        function endHold() {
-            if (scanCompleted) return;
-            clearInterval(holdInterval);
+        function cancelPress() {
+            if (unlocked) return;
+            clearInterval(timer);
+            fpBtn.classList.remove('pressing');
             progress = 0;
-            ring.style.strokeDashoffset = circumference;
-            heartEmoji.style.transform = "scale(1)";
-            scanStatus.innerText = "No lo sueltes hasta que termine...";
+            ringFill.style.strokeDashoffset = circumference;
+            scanText.innerText = "Mantén presionada la huella ♥";
         }
 
-        holdBtn.addEventListener('mousedown', startHold);
-        holdBtn.addEventListener('touchstart', startHold);
-        window.addEventListener('mouseup', endHold);
-        window.addEventListener('touchend', endHold);
+        fpBtn.addEventListener('mousedown', startPress);
+        fpBtn.addEventListener('touchstart', startPress, { passive: false });
+        window.addEventListener('mouseup', cancelPress);
+        window.addEventListener('touchend', cancelPress);
 
-        // --- FASE 2: SLIDER REBELDE ---
-        const slider = document.getElementById('love-slider');
-        const sliderVal = document.getElementById('slider-val');
-        const sliderFeedback = document.getElementById('slider-feedback');
-        const nextTo3 = document.getElementById('next-to-3');
+        // 3. ABRIR Y CERRAR SOBRE + CONFETI
+        const envelope = document.getElementById('envelope');
+        const letterModal = document.getElementById('letter-modal');
 
-        slider.addEventListener('input', () => {
-            const val = parseInt(slider.value);
-            sliderVal.innerText = val + "%";
+        function openEnvelope() {
+            envelope.classList.add('opened');
+            launchConfetti();
+            setTimeout(() => {
+                letterModal.classList.add('visible');
+            }, 350);
+        }
 
-            if (val < 95) {
-                sliderFeedback.innerText = "¿En serio crees que tan poquito? Sube eso...";
-            } else {
-                // Cuando llega al final, lo desborda a infinito
-                sliderVal.innerText = "∞ %";
-                sliderFeedback.innerText = "¡Exacto! No tiene límite. Ni lo intentes bajar 😉";
-                nextTo3.classList.remove('hidden');
+        function closeEnvelope() {
+            letterModal.classList.remove('visible');
+            setTimeout(() => {
+                envelope.classList.remove('opened');
+            }, 300);
+        }
+
+        // 4. CONFETI SUAVE EN TONOS ROSA/DORADO
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let confettiPieces = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function launchConfetti() {
+            const colors = ['#c93b5b', '#f48fb1', '#f8bbd0', '#e57373', '#d4af37'];
+            confettiPieces = [];
+            for (let i = 0; i < 85; i++) {
+                confettiPieces.push({
+                    x: canvas.width / 2 + (Math.random() - 0.5) * 140,
+                    y: canvas.height / 2,
+                    vx: (Math.random() - 0.5) * 11,
+                    vy: (Math.random() - 1.2) * 11 - 2,
+                    size: Math.random() * 7 + 4,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    rotation: Math.random() * 360,
+                    vRot: (Math.random() - 0.5) * 10
+                });
             }
-        });
+            animateConfetti();
+        }
 
-        slider.addEventListener('change', () => {
-            // Si intenta soltarlo abajo, se regresa solo al 100%
-            if (parseInt(slider.value) < 95) {
-                setTimeout(() => {
-                    slider.value = 100;
-                    sliderVal.innerText = "∞ %";
-                    sliderFeedback.innerText = "Error de cálculo: el sistema lo corrigió al máximo automático ❤️";
-                    nextTo3.classList.remove('hidden');
-                }, 400);
-            }
-        });
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let active = false;
 
-        // --- FASE 3: CONSTELACIÓN DE RAZONES ---
-        const starReasons = [
-            "1. Tu sonrisa es mi parte favorita del día.",
-            "2. Cómo me haces sentir en paz con solo hablar contigo.",
-            "3. Tu forma de ser tan auténtica y especial.",
-            "4. Que incluso en mis días ocupados, pensar en ti me cambia el humor.",
-            "5. Porque contigo todo se siente más bonito."
-        ];
-        const litStars = new Set();
+            confettiPieces.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.25; // gravedad
+                p.rotation += p.vRot;
 
-        function lightStar(index, btn) {
-            btn.classList.add('lit');
-            btn.innerText = '❤️';
-            litStars.add(index);
-            document.getElementById('star-message').innerText = starReasons[index];
+                if (p.y < canvas.height + 20) active = true;
 
-            if (litStars.size === 5) {
-                document.getElementById('next-to-4').classList.remove('hidden');
-            }
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate((p.rotation * Math.PI) / 180);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+                ctx.restore();
+            });
+
+            if (active) requestAnimationFrame(animateConfetti);
         }
     </script>
 </body>
