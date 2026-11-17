@@ -1,214 +1,179 @@
-index.html
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Jardín de Amor Infinito 🌸</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Ti ❤️</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --rosa-pastel: #ffe5ec;
-            --rosa-fuerte: #fb6f92;
-            --texto: #4a4a4a;
-        }
-
         body {
-            margin: 0; padding: 0; height: 100vh;
-            display: flex; justify-content: center; align-items: center;
-            background: radial-gradient(circle, #fff0f3 0%, #ffc2d1 100%);
-            font-family: 'Quicksand', sans-serif;
-            overflow: hidden; touch-action: manipulation;
+            font-family: 'Montserrat', sans-serif;
+            background: radial-gradient(circle at top, #1f1118 0%, #0d070a 100%);
+            color: #f8f1f4;
+            overflow-x: hidden;
         }
-
-        /* Stats */
-        .stats {
-            position: absolute; top: 20px;
-            display: flex; gap: 15px; z-index: 20;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 8px 18px; border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(251, 111, 146, 0.15);
+        .serif {
+            font-family: 'Cormorant Garamond', serif;
         }
-        .stat-item { font-weight: 700; color: var(--rosa-fuerte); font-size: 0.85rem; }
-
-        /* Card */
-        .card {
-            background: rgba(255, 255, 255, 0.96);
-            padding: 25px; border-radius: 40px;
-            text-align: center; width: 88%; max-width: 350px;
-            z-index: 10; border: 2px solid white;
-            box-shadow: 0 20px 40px rgba(251, 111, 146, 0.2);
-            transition: transform 0.3s ease;
+        .glass {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 192, 203, 0.15);
         }
-
-        #level-tag { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; color: #fb6f92; font-weight: 700; opacity: 0.7; }
-        h1 { font-family: 'Dancing Script', cursive; color: var(--rosa-fuerte); font-size: 2.2rem; margin: 10px 0; }
-
-        /* Barra de Progreso */
-        .progress-outer { width: 100%; height: 12px; background: #f0f0f0; border-radius: 10px; margin: 15px 0; overflow: hidden; border: 1px solid #ffe5ec; }
-        .progress-inner { width: 0%; height: 100%; background: linear-gradient(90deg, #fb6f92, #ff8fab); transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-
-        .message-box { min-height: 120px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; }
-        #mensaje { color: var(--texto); transition: all 0.3s ease; font-size: 1.1rem; line-height: 1.4; }
-
-        .btn-love {
-            background: linear-gradient(45deg, var(--rosa-fuerte), #ff8fab);
-            color: white; border: none; width: 100%;
-            padding: 18px; font-size: 1.1rem; border-radius: 25px;
-            cursor: pointer; font-weight: 700;
-            box-shadow: 0 8px 15px rgba(251, 111, 146, 0.3);
+        .heart-particle {
+            position: fixed;
+            color: rgba(244, 63, 94, 0.4);
+            pointer-events: none;
+            animation: floatUp linear infinite;
+            z-index: 0;
         }
-        .btn-love:active { transform: scale(0.95); }
-
-        /* ANIMACIÓN GRAN CORAZÓN */
-        #heart-overlay {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            display: flex; justify-content: center; align-items: center;
-            pointer-events: none; z-index: 100; opacity: 0;
-        }
-        .big-heart { font-size: 150px; filter: drop-shadow(0 0 20px rgba(251, 111, 146, 0.5)); }
-        
-        .pop-heart { animation: heartPop 1.2s ease-out forwards; }
-        @keyframes heartPop {
-            0% { transform: scale(0); opacity: 0; }
-            50% { transform: scale(1.5); opacity: 1; }
-            100% { transform: scale(2); opacity: 0; }
-        }
-
-        /* Pétalos */
-        .flower { position: absolute; pointer-events: none; z-index: 1; animation: floatUp 8s linear forwards; }
         @keyframes floatUp {
-            0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
-            20% { opacity: 0.7; }
-            100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            50% { opacity: 0.7; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
+        .fade-in {
+            animation: fadeIn 1.5s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col items-center justify-between p-6 relative">
 
-    <div class="stats">
-        <div class="stat-item">🌸 Flores: <span id="count">0</span></div>
-        <div class="stat-item">💖 Nivel: <span id="level-name">Cariño</span></div>
-    </div>
+    <!-- Contenedor de partículas -->
+    <div id="particles"></div>
 
-    <div id="heart-overlay"><span class="big-heart">❤️</span></div>
+    <!-- Encabezado -->
+    <header class="text-center mt-10 z-10 fade-in">
+        <p class="text-xs uppercase tracking-[0.3em] text-rose-300/80 mb-2">Un detalle para ti</p>
+        <h1 class="serif text-5xl md:text-6xl font-semibold text-rose-100">Para mi damisela</h1>
+        <div class="w-16 h-[1px] bg-rose-400/50 mx-auto mt-4"></div>
+    </header>
 
-    <div class="card">
-        <div id="level-tag">Pensamientos para ti</div>
-        <h1 id="title">Click de Amor</h1>
-        
-        <div class="progress-outer">
-            <div class="progress-inner" id="bar"></div>
-        </div>
+    <!-- Contenido Principal -->
+    <main class="w-full max-w-xl my-10 space-y-8 z-10 fade-in">
 
-        <div class="message-box">
-            <p id="mensaje">Cada vez que llenes la barra, recibirás un corazón especial... ❤️</p>
-        </div>
+        <!-- Contador de tiempo juntos -->
+        <section class="glass rounded-2xl p-6 text-center shadow-2xl">
+            <h2 class="serif italic text-2xl text-rose-200 mb-4">Cada segundo a tu lado cuenta</h2>
+            <div class="grid grid-cols-4 gap-2 text-center" id="timer">
+                <div class="bg-black/30 rounded-xl p-3">
+                    <span id="days" class="block text-2xl md:text-3xl font-semibold text-rose-400">00</span>
+                    <span class="text-[10px] uppercase tracking-wider text-gray-400">Días</span>
+                </div>
+                <div class="bg-black/30 rounded-xl p-3">
+                    <span id="hours" class="block text-2xl md:text-3xl font-semibold text-rose-400">00</span>
+                    <span class="text-[10px] uppercase tracking-wider text-gray-400">Horas</span>
+                </div>
+                <div class="bg-black/30 rounded-xl p-3">
+                    <span id="minutes" class="block text-2xl md:text-3xl font-semibold text-rose-400">00</span>
+                    <span class="text-[10px] uppercase tracking-wider text-gray-400">Min</span>
+                </div>
+                <div class="bg-black/30 rounded-xl p-3">
+                    <span id="seconds" class="block text-2xl md:text-3xl font-semibold text-rose-400">00</span>
+                    <span class="text-[10px] uppercase tracking-wider text-gray-400">Seg</span>
+                </div>
+            </div>
+        </section>
 
-        <button class="btn-love" id="magicBtn">DESCUBRIR 🌸</button>
-    </div>
+        <!-- Generador de razones -->
+        <section class="glass rounded-2xl p-6 text-center shadow-2xl">
+            <p class="text-xs uppercase tracking-widest text-rose-300/70 mb-3">Lo que me encanta de ti</p>
+            <p id="reason-text" class="serif italic text-2xl text-white min-h-[4rem] flex items-center justify-center px-2">
+                "Tu sonrisa ilumina hasta mis días más pesados."
+            </p>
+            <button onclick="nextReason()" class="mt-4 px-6 py-2.5 rounded-full bg-rose-600/80 hover:bg-rose-500 text-sm font-medium transition-all shadow-lg shadow-rose-900/40 active:scale-95">
+                Ver otra razón ✨
+            </button>
+        </section>
 
-    <div id="garden"></div>
+        <!-- Carta interactiva -->
+        <section class="glass rounded-2xl p-6 shadow-2xl">
+            <div class="flex justify-between items-center cursor-pointer" onclick="toggleLetter()">
+                <h3 class="serif text-2xl text-rose-200">Una carta para ti...</h3>
+                <span id="letter-icon" class="text-rose-400 text-xl transition-transform duration-300">▼</span>
+            </div>
+            <div id="letter-content" class="hidden mt-4 pt-4 border-t border-rose-200/10 text-sm leading-relaxed text-gray-200 space-y-3">
+                <p>Quería hacerte este pequeño rincón en internet solo para recordarte lo importante que eres para mí.</p>
+                <p>Desde que llegaste, todo tiene un brillo distinto. Me encanta cómo eres, tu forma de ver la vida y cada momento que compartimos juntos.</p>
+                <p class="serif italic text-xl text-rose-300 text-right pt-2">Con todo mi cariño, Ángel ❤️</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="text-center text-xs text-gray-500 z-10 pb-4">
+        Hecho especialmente para ti • 2026
+    </footer>
 
     <script>
-        let clicks = 0;
-        let totalClicksEver = 0;
-        const clicksToFill = 7; // Cuántos clicks para llenar la barra
+        // 1. CONFIGURA AQUÍ TU FECHA DE INICIO (Año, Mes - 1, Día, Hora, Minuto)
+        // Ejemplo: 20 de Agosto de 2026 -> new Date(2026, 7, 20, 0, 0)
+        const startDate = new Date(2026, 7, 20, 0, 0); 
 
-        const frases = [
-            "Eres mi persona favorita. ❤️",
-            "Me encantas, así de simple. 😊",
-            "Eres pura magia. ✨",
-            "Contigo todo es mejor. 🌷",
-            "Mi lugar favorito eres tú. 📍",
-            "Gracias por existir. 🥰",
-            "Eres calma en mi caos. ❤️",
-            "Te quiero muchísimo. 💖",
-            "Eres mi mejor coincidencia. 🌠",
-            "Sonrío al pensarte. 😊",
-            "Eres el detalle más lindo. 🌸",
-            "Me haces muy feliz. 💓"
+        function updateTimer() {
+            const now = new Date();
+            const diff = now - startDate;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / 1000 / 60) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            document.getElementById('days').innerText = days >= 0 ? days : 0;
+            document.getElementById('hours').innerText = hours >= 0 ? String(hours).padStart(2, '0') : '00';
+            document.getElementById('minutes').innerText = minutes >= 0 ? String(minutes).padStart(2, '0') : '00';
+            document.getElementById('seconds').innerText = seconds >= 0 ? String(seconds).padStart(2, '0') : '00';
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // 2. PERSONALIZA AQUÍ TUS FRASES
+        const reasons = [
+            "Tu sonrisa ilumina hasta mis días más pesados.",
+            "La paz que siento cada vez que estoy contigo.",
+            "Cómo me miras y haces que todo lo demás desaparezca.",
+            "Tu forma tan única y especial de ser.",
+            "Cada plática, cada risa y cada momento a tu lado.",
+            "Eres mi persona favorita en todo el mundo."
         ];
+        let currentReason = 0;
 
-        const btn = document.getElementById('magicBtn');
-        const text = document.getElementById('mensaje');
-        const countDisplay = document.getElementById('count');
-        const bar = document.getElementById('bar');
-        const heartOverlay = document.getElementById('heart-overlay');
-        const levelName = document.getElementById('level-name');
-
-        btn.addEventListener('click', () => {
-            clicks++;
-            totalClicksEver++;
-            
-            // Actualizar interfaz
-            countDisplay.textContent = totalClicksEver;
-            
-            // Calcular progreso (0 a 100)
-            let progress = (clicks / clicksToFill) * 100;
-            bar.style.width = progress + "%";
-
-            // Efecto Confeti pequeño
-            confetti({
-                particleCount: 30,
-                spread: 50,
-                origin: { y: 0.8 },
-                colors: ['#fb6f92', '#ffffff']
-            });
-
-            // Cambiar mensaje
-            text.style.opacity = 0;
+        function nextReason() {
+            currentReason = (currentReason + 1) % reasons.length;
+            const el = document.getElementById('reason-text');
+            el.style.opacity = 0;
             setTimeout(() => {
-                text.textContent = frases[Math.floor(Math.random() * frases.length)];
-                text.style.opacity = 1;
+                el.innerText = `"${reasons[currentReason]}"`;
+                el.style.opacity = 1;
             }, 200);
-
-            // ¿Barra llena?
-            if (clicks >= clicksToFill) {
-                showHeartAnimation();
-            }
-        });
-
-        function showHeartAnimation() {
-            // 1. Mostrar corazón gigante
-            heartOverlay.classList.remove('pop-heart');
-            void heartOverlay.offsetWidth; // Truco para reiniciar animación
-            heartOverlay.classList.add('pop-heart');
-
-            // 2. Confeti grande
-            confetti({
-                particleCount: 150,
-                spread: 100,
-                origin: { y: 0.6 },
-                colors: ['#ff0000', '#fb6f92', '#ffffff']
-            });
-
-            // 3. Reiniciar barra y clicks locales
-            setTimeout(() => {
-                clicks = 0;
-                bar.style.width = "0%";
-                // Cambiar nivel aleatoriamente para que se vea didáctico
-                const niveles = ["Adoración", "Pasión", "Ternura", "Infinito"];
-                levelName.textContent = niveles[Math.floor(Math.random() * niveles.length)];
-            }, 1000);
         }
 
-        // Sistema de pétalos flotantes
-        function createFlower() {
-            const symbols = ['🌸', '✨', '💖', '🌷'];
-            const f = document.createElement('div');
-            f.className = 'flower';
-            f.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-            f.style.left = Math.random() * 95 + 'vw';
-            f.style.bottom = "-50px";
-            f.style.fontSize = (Math.random() * 15 + 15) + 'px';
-            document.getElementById('garden').appendChild(f);
-            setTimeout(() => f.remove(), 8000);
+        // 3. ABRIR/CERRAR CARTA
+        function toggleLetter() {
+            const content = document.getElementById('letter-content');
+            const icon = document.getElementById('letter-icon');
+            content.classList.toggle('hidden');
+            icon.style.transform = content.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
         }
-        setInterval(createFlower, 1000);
+
+        // 4. PARTÍCULAS FLOTANTES
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart-particle');
+            heart.innerHTML = '♥';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = (Math.random() * 15 + 10) + 'px';
+            heart.style.animationDuration = (Math.random() * 5 + 6) + 's';
+            document.getElementById('particles').appendChild(heart);
+            setTimeout(() => heart.remove(), 11000);
+        }
+        setInterval(createHeart, 600);
     </script>
 </body>
 </html>
