@@ -20,7 +20,9 @@
             margin: 0;
             padding: 0;
             -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
             user-select: none;
+            -webkit-user-select: none;
         }
 
         body {
@@ -35,7 +37,6 @@
             position: relative;
         }
 
-        /* Botón flotante de música */
         .music-toggle {
             position: fixed;
             top: 18px;
@@ -63,7 +64,6 @@
         }
         .music-toggle:active { transform: scale(0.9); }
 
-        /* Partículas flotantes */
         .floating-particles {
             position: fixed;
             inset: 0;
@@ -87,7 +87,6 @@
             100% { transform: translateY(110vh) rotate(360deg) translateX(25px); opacity: 0; }
         }
 
-        /* Pantallas */
         .screen {
             position: absolute;
             inset: 0;
@@ -127,7 +126,7 @@
             text-align: center;
         }
 
-        /* --- PANTALLA 1: HUELLA --- */
+        /* --- PANTALLA 1: HUELLA (CON BLOQUEO DE GESTOS NATIVOS) --- */
         .fingerprint-wrapper {
             position: relative;
             width: 140px;
@@ -137,6 +136,8 @@
             justify-content: center;
             margin: 26px 0 22px;
             cursor: pointer;
+            touch-action: none;
+            -webkit-touch-callout: none;
         }
 
         .progress-ring {
@@ -144,6 +145,7 @@
             width: 140px;
             height: 140px;
             transform: rotate(-90deg);
+            pointer-events: none;
         }
 
         .progress-ring-bg {
@@ -171,6 +173,7 @@
             stroke-width: 2.2;
             stroke-linecap: round;
             z-index: 2;
+            pointer-events: none;
             transition: transform 0.25s ease, filter 0.25s ease;
         }
 
@@ -337,7 +340,6 @@
 
         .letter-body p { margin-bottom: 12px; }
 
-        /* Caja interactiva de razones dentro de la carta */
         .reason-box {
             background: #fff5f8;
             border: 1px dashed rgba(201, 59, 91, 0.3);
@@ -369,7 +371,6 @@
             justify-content: center;
         }
 
-        /* Galería Polaroid opcional (se oculta sola si no pones fotos) */
         .polaroid-row {
             display: flex;
             justify-content: center;
@@ -415,20 +416,15 @@
 </head>
 <body>
 
-    <!-- Control de música ambiental -->
     <button class="music-toggle" id="music-btn" onclick="toggleMusic()" title="Música">🎵</button>
-
-    <!-- Partículas flotantes -->
     <div class="floating-particles" id="particles"></div>
-
-    <!-- Canvas de confeti -->
     <canvas id="confetti-canvas"></canvas>
 
     <!-- PANTALLA 1: HUELLA DIGITAL -->
     <section class="screen" id="screen-fingerprint">
         <h1 class="script-title">Para ti - Me encantas</h1>
         
-        <div class="fingerprint-wrapper" id="fp-btn">
+        <div class="fingerprint-wrapper" id="fp-btn" role="button" tabindex="0">
             <svg class="progress-ring" viewBox="0 0 140 140">
                 <circle class="progress-ring-bg" cx="70" cy="70" r="60" />
                 <circle class="progress-ring-fill" id="ring-fill" cx="70" cy="70" r="60" />
@@ -466,13 +462,11 @@
                 <p>Si algún día llegas a dudarlo, regresa a este link y acuérdate de que eres mi persona favorita, con quien cualquier momento normal se vuelve increíble.</p>
             </div>
 
-            <!-- Cajita interactiva que cambia de frase al tocarla -->
             <div class="reason-box" onclick="nextReason()">
                 <span class="reason-label">✨ Toca aquí para ver otra razón (1/5)</span>
                 <p class="reason-quote" id="reason-quote">"Tu sonrisa me cambia el ánimo en segundos."</p>
             </div>
 
-            <!-- OPCIONAL: Si subes 2 fotos llamadas foto1.jpg y foto2.jpg a tu repo de GitHub, aparecerán aquí automáticamente -->
             <div class="polaroid-row" id="photo-gallery">
                 <div class="polaroid">
                     <img src="foto1.jpg" alt="Nosotros" onerror="this.parentElement.style.display='none'">
@@ -487,7 +481,7 @@
     </div>
 
     <script>
-        // --- 1. MELODÍA SUAVE DE PIANO/CAJA MUSICAL ---
+        // --- 1. MELODÍA SUAVE ---
         let audioCtx = null;
         let musicPlaying = false;
         let melodyInterval = null;
@@ -496,34 +490,39 @@
 
         function playSoftNote(freq) {
             if (!audioCtx || !musicPlaying) return;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
 
-            gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.045, audioCtx.currentTime + 0.08);
-            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.4);
+                gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.045, audioCtx.currentTime + 0.08);
+                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.4);
 
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 1.45);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 1.45);
+            } catch (err) {}
         }
 
         function startAmbientMusic() {
             if (musicPlaying) return;
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            musicPlaying = true;
-            document.getElementById('music-btn').classList.add('visible');
-            playSoftNote(notes[0]);
-            noteIdx = 1;
-            melodyInterval = setInterval(() => {
-                if (musicPlaying) {
-                    playSoftNote(notes[noteIdx]);
-                    noteIdx = (noteIdx + 1) % notes.length;
-                }
-            }, 680);
+            try {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                musicPlaying = true;
+                document.getElementById('music-btn').classList.add('visible');
+                playSoftNote(notes[0]);
+                noteIdx = 1;
+                melodyInterval = setInterval(() => {
+                    if (musicPlaying) {
+                        playSoftNote(notes[noteIdx]);
+                        noteIdx = (noteIdx + 1) % notes.length;
+                    }
+                }, 680);
+            } catch (err) {}
         }
 
         function toggleMusic() {
@@ -555,7 +554,7 @@
         setInterval(spawnPetal, 450);
         for (let i = 0; i < 12; i++) setTimeout(spawnPetal, i * 250);
 
-        // --- 3. HUELLA DIGITAL ---
+        // --- 3. HUELLA DIGITAL (CORREGIDO CON POINTER EVENTS) ---
         const fpBtn = document.getElementById('fp-btn');
         const ringFill = document.getElementById('ring-fill');
         const scanText = document.getElementById('scan-text');
@@ -563,16 +562,27 @@
         let progress = 0;
         let timer = null;
         let unlocked = false;
+        let isPressing = false;
+
+        // Bloquear menú contextual al mantener presionado en celular
+        fpBtn.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        });
 
         function startPress(e) {
-            e.preventDefault();
-            if (unlocked) return;
+            if (e.cancelable) e.preventDefault();
+            if (unlocked || isPressing) return;
+            
+            isPressing = true;
             startAmbientMusic();
             fpBtn.classList.add('pressing');
             scanText.innerText = "Verificando latidos...";
 
+            clearInterval(timer);
             timer = setInterval(() => {
-                progress += 2.2;
+                progress += 2.5;
                 const offset = circumference - (progress / 100) * circumference;
                 ringFill.style.strokeDashoffset = Math.max(offset, 0);
 
@@ -580,12 +590,4 @@
                     scanText.innerText = "Casi listo...";
                 }
 
-                if (progress >= 100) {
-                    clearInterval(timer);
-                    unlocked = true;
-                    fpBtn.classList.remove('pressing');
-                    scanText.innerText = "Bienvenida, amor ♥";
-                    if (navigator.vibrate) navigator.vibrate([60, 40, 100]);
-
-                    setTimeout(() => {
-                    
+         
