@@ -8,7 +8,9 @@
     <style>
         :root {
             --primary: #c93b5b;
-            --primary-soft: #f8bbd0;
+            --primary-light: #f3c6d0;
+            --envelope-front: #fce4ec;
+            --envelope-flap: #f8bbd0;
             --envelope-shadow: rgba(201, 59, 91, 0.18);
             --bg-center: #ffffff;
             --bg-edge: #f9eef1;
@@ -20,9 +22,7 @@
             margin: 0;
             padding: 0;
             -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
             user-select: none;
-            -webkit-user-select: none;
         }
 
         body {
@@ -37,33 +37,7 @@
             position: relative;
         }
 
-        .music-toggle {
-            position: fixed;
-            top: 18px;
-            right: 18px;
-            z-index: 50;
-            background: rgba(255, 255, 255, 0.85);
-            border: 1px solid rgba(201, 59, 91, 0.25);
-            color: var(--primary);
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(201, 59, 91, 0.12);
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.4s ease, transform 0.2s ease;
-        }
-        .music-toggle.visible {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .music-toggle:active { transform: scale(0.9); }
-
+        /* Pétalos y corazones flotantes de fondo */
         .floating-particles {
             position: fixed;
             inset: 0;
@@ -81,12 +55,19 @@
         }
 
         @keyframes fall {
-            0% { transform: translateY(-10vh) rotate(0deg) translateX(0); opacity: 0; }
+            0% {
+                transform: translateY(-10vh) rotate(0deg) translateX(0);
+                opacity: 0;
+            }
             15% { opacity: 0.55; }
             85% { opacity: 0.45; }
-            100% { transform: translateY(110vh) rotate(360deg) translateX(25px); opacity: 0; }
+            100% {
+                transform: translateY(110vh) rotate(360deg) translateX(25px);
+                opacity: 0;
+            }
         }
 
+        /* Contenedor de pantallas */
         .screen {
             position: absolute;
             inset: 0;
@@ -105,6 +86,7 @@
             transform: scale(0.96);
         }
 
+        /* Tipografía caligráfica */
         .script-title {
             font-family: 'Great Vibes', cursive;
             font-size: clamp(2.8rem, 8vw, 4.2rem);
@@ -126,7 +108,7 @@
             text-align: center;
         }
 
-        /* --- PANTALLA 1: HUELLA (CON BLOQUEO DE GESTOS NATIVOS) --- */
+        /* --- PANTALLA 1: ESCÁNER DE HUELLA --- */
         .fingerprint-wrapper {
             position: relative;
             width: 140px;
@@ -136,8 +118,6 @@
             justify-content: center;
             margin: 26px 0 22px;
             cursor: pointer;
-            touch-action: none;
-            -webkit-touch-callout: none;
         }
 
         .progress-ring {
@@ -145,7 +125,6 @@
             width: 140px;
             height: 140px;
             transform: rotate(-90deg);
-            pointer-events: none;
         }
 
         .progress-ring-bg {
@@ -173,7 +152,6 @@
             stroke-width: 2.2;
             stroke-linecap: round;
             z-index: 2;
-            pointer-events: none;
             transition: transform 0.25s ease, filter 0.25s ease;
         }
 
@@ -188,9 +166,10 @@
             color: #7c4d58;
             min-height: 28px;
             text-align: center;
+            transition: opacity 0.3s ease;
         }
 
-        /* --- PANTALLA 2: SOBRE --- */
+        /* --- PANTALLA 2: EL SOBRE ROSA --- */
         .envelope-container {
             position: relative;
             width: min(310px, 84vw);
@@ -200,8 +179,13 @@
             margin-bottom: 24px;
         }
 
-        .envelope-container:hover { transform: translateY(-5px) scale(1.02); }
-        .envelope-container:active { transform: scale(0.97); }
+        .envelope-container:hover {
+            transform: translateY(-5px) scale(1.02);
+        }
+
+        .envelope-container:active {
+            transform: scale(0.97);
+        }
 
         .envelope-body {
             position: relative;
@@ -214,6 +198,7 @@
             border: 1px solid rgba(255, 255, 255, 0.8);
         }
 
+        /* Pliegues laterales e inferior del sobre */
         .envelope-body::before {
             content: '';
             position: absolute;
@@ -224,6 +209,7 @@
             z-index: 2;
         }
 
+        /* Solapa superior triangular */
         .envelope-flap {
             position: absolute;
             top: 0;
@@ -243,6 +229,7 @@
             z-index: 1;
         }
 
+        /* Sello de corazón en el centro */
         .wax-seal {
             position: absolute;
             top: 52%;
@@ -267,21 +254,20 @@
             transform: translate(-50%, -50%) scale(0.5);
         }
 
-        /* --- MODAL DE LA CARTA + POLAROIDS --- */
+        /* --- MODAL DE LA CARTA ABIERTA --- */
         .letter-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(74, 44, 51, 0.22);
-            backdrop-filter: blur(5px);
+            background: rgba(74, 44, 51, 0.18);
+            backdrop-filter: blur(4px);
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 16px;
+            padding: 20px;
             z-index: 30;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.5s ease;
-            overflow-y: auto;
         }
 
         .letter-overlay.visible {
@@ -293,10 +279,10 @@
             background: #fffdfd;
             width: 100%;
             max-width: 420px;
-            border-radius: 14px;
-            padding: 34px 26px 28px;
+            border-radius: 12px;
+            padding: 36px 28px 30px;
             position: relative;
-            box-shadow: 0 25px 60px rgba(145, 38, 63, 0.25);
+            box-shadow: 0 25px 60px rgba(145, 38, 63, 0.22);
             border: 1px solid rgba(201, 59, 91, 0.14);
             transform: translateY(30px) scale(0.94);
             transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
@@ -309,8 +295,8 @@
 
         .close-btn {
             position: absolute;
-            top: 12px;
-            right: 12px;
+            top: 14px;
+            right: 14px;
             width: 28px;
             height: 28px;
             border-radius: 50%;
@@ -318,94 +304,46 @@
             background: #fff;
             color: var(--primary);
             font-family: 'Montserrat', sans-serif;
-            font-size: 13px;
+            font-size: 14px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .close-btn:hover {
+            background: #fce4ec;
         }
 
         .letter-header {
             font-family: 'Great Vibes', cursive;
-            font-size: 2.45rem;
+            font-size: 2.5rem;
             color: var(--primary);
-            margin-bottom: 10px;
+            margin-bottom: 14px;
         }
 
         .letter-body {
-            font-size: 1.06rem;
-            line-height: 1.62;
+            font-size: 1.08rem;
+            line-height: 1.65;
             color: #4f353b;
+            space-y: 12px;
         }
 
-        .letter-body p { margin-bottom: 12px; }
-
-        .reason-box {
-            background: #fff5f8;
-            border: 1px dashed rgba(201, 59, 91, 0.3);
-            border-radius: 10px;
-            padding: 13px 15px;
-            margin: 15px 0;
-            cursor: pointer;
-            transition: transform 0.2s ease, background 0.2s ease;
-        }
-        .reason-box:active { transform: scale(0.98); }
-
-        .reason-label {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: var(--primary);
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .reason-quote {
-            font-style: italic;
-            font-size: 1.06rem;
-            color: #5a2d38;
-            min-height: 2.8rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .polaroid-row {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin: 14px 0 6px;
-        }
-        .polaroid {
-            background: #fff;
-            padding: 6px 6px 18px;
-            border-radius: 4px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-            border: 1px solid #f2dce2;
-            width: 115px;
-            transition: transform 0.3s ease;
-        }
-        .polaroid:nth-child(1) { transform: rotate(-4deg); }
-        .polaroid:nth-child(2) { transform: rotate(4deg); }
-        .polaroid:hover { transform: rotate(0deg) scale(1.06); z-index: 5; }
-        .polaroid img {
-            width: 100%;
-            height: 95px;
-            object-fit: cover;
-            border-radius: 2px;
-            display: block;
+        .letter-body p {
+            margin-bottom: 13px;
         }
 
         .letter-signature {
             font-family: 'Great Vibes', cursive;
             font-size: 1.9rem;
             color: var(--primary);
-            margin-top: 12px;
+            margin-top: 18px;
             text-align: right;
-            padding-right: 6px;
+            padding-right: 8px;
         }
 
+        /* Canvas para confeti */
         #confetti-canvas {
             position: fixed;
             inset: 0;
@@ -416,19 +354,22 @@
 </head>
 <body>
 
-    <button class="music-toggle" id="music-btn" onclick="toggleMusic()" title="Música">🎵</button>
+    <!-- Partículas flotantes -->
     <div class="floating-particles" id="particles"></div>
+
+    <!-- Canvas de confeti al abrir la carta -->
     <canvas id="confetti-canvas"></canvas>
 
     <!-- PANTALLA 1: HUELLA DIGITAL -->
     <section class="screen" id="screen-fingerprint">
         <h1 class="script-title">Para ti - Me encantas</h1>
         
-        <div class="fingerprint-wrapper" id="fp-btn" role="button" tabindex="0">
+        <div class="fingerprint-wrapper" id="fp-btn">
             <svg class="progress-ring" viewBox="0 0 140 140">
                 <circle class="progress-ring-bg" cx="70" cy="70" r="60" />
                 <circle class="progress-ring-fill" id="ring-fill" cx="70" cy="70" r="60" />
             </svg>
+            <!-- Icono SVG de huella dactilar -->
             <svg class="fingerprint-svg" viewBox="0 0 24 24">
                 <path d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" />
             </svg>
@@ -456,88 +397,17 @@
         <div class="letter-paper">
             <button class="close-btn" onclick="closeEnvelope()" aria-label="Cerrar">✕</button>
             <h3 class="letter-header">Para ti,</h3>
-            
             <div class="letter-body">
-                <p>No hace falta que sea una fecha especial para recordarte lo mucho que me gustas.</p>
-                <p>Si algún día llegas a dudarlo, regresa a este link y acuérdate de que eres mi persona favorita, con quien cualquier momento normal se vuelve increíble.</p>
+                <p>No hace falta que sea una fecha especial para recordarte lo mucho que me gustas y lo bien que me haces sentir.</p>
+                <p>Si algún día llegas a dudarlo, solo abre este enlace y acuérdate de que eres mi persona favorita, la que me saca sonrisas sin intentarlo y con quien cualquier momento vale la pena.</p>
+                <p>Me encanta tu forma de ser, tu mirada y la paz que siento cada vez que estoy contigo.</p>
             </div>
-
-            <div class="reason-box" onclick="nextReason()">
-                <span class="reason-label">✨ Toca aquí para ver otra razón (1/5)</span>
-                <p class="reason-quote" id="reason-quote">"Tu sonrisa me cambia el ánimo en segundos."</p>
-            </div>
-
-            <div class="polaroid-row" id="photo-gallery">
-                <div class="polaroid">
-                    <img src="foto1.jpg" alt="Nosotros" onerror="this.parentElement.style.display='none'">
-                </div>
-                <div class="polaroid">
-                    <img src="foto2.jpg" alt="Nosotros" onerror="this.parentElement.style.display='none'">
-                </div>
-            </div>
-
             <div class="letter-signature">Con cariño, Ángel ♥</div>
         </div>
     </div>
 
     <script>
-        // --- 1. MELODÍA SUAVE ---
-        let audioCtx = null;
-        let musicPlaying = false;
-        let melodyInterval = null;
-        const notes = [523.25, 659.25, 783.99, 987.77, 880.00, 783.99, 659.25, 587.33, 698.46, 880.00, 783.99, 659.25];
-        let noteIdx = 0;
-
-        function playSoftNote(freq) {
-            if (!audioCtx || !musicPlaying) return;
-            try {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-
-                gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.045, audioCtx.currentTime + 0.08);
-                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.4);
-
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 1.45);
-            } catch (err) {}
-        }
-
-        function startAmbientMusic() {
-            if (musicPlaying) return;
-            try {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                if (audioCtx.state === 'suspended') audioCtx.resume();
-                musicPlaying = true;
-                document.getElementById('music-btn').classList.add('visible');
-                playSoftNote(notes[0]);
-                noteIdx = 1;
-                melodyInterval = setInterval(() => {
-                    if (musicPlaying) {
-                        playSoftNote(notes[noteIdx]);
-                        noteIdx = (noteIdx + 1) % notes.length;
-                    }
-                }, 680);
-            } catch (err) {}
-        }
-
-        function toggleMusic() {
-            const btn = document.getElementById('music-btn');
-            if (musicPlaying) {
-                musicPlaying = false;
-                btn.innerText = '🔇';
-            } else {
-                if (!audioCtx) startAmbientMusic();
-                musicPlaying = true;
-                btn.innerText = '🎵';
-            }
-        }
-
-        // --- 2. PARTÍCULAS FLOTANTES ---
+        // 1. GENERADOR DE PÉTALOS/CORAZONES FLOTANTES
         const particlesContainer = document.getElementById('particles');
         const symbols = ['♥', '❀', '•'];
 
@@ -554,35 +424,23 @@
         setInterval(spawnPetal, 450);
         for (let i = 0; i < 12; i++) setTimeout(spawnPetal, i * 250);
 
-        // --- 3. HUELLA DIGITAL (CORREGIDO CON POINTER EVENTS) ---
+        // 2. LÓGICA DE LA HUELLA DIGITAL
         const fpBtn = document.getElementById('fp-btn');
         const ringFill = document.getElementById('ring-fill');
         const scanText = document.getElementById('scan-text');
-        const circumference = 377;
+        const circumference = 377; // 2 * PI * 60
         let progress = 0;
         let timer = null;
         let unlocked = false;
-        let isPressing = false;
-
-        // Bloquear menú contextual al mantener presionado en celular
-        fpBtn.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
-        });
 
         function startPress(e) {
-            if (e.cancelable) e.preventDefault();
-            if (unlocked || isPressing) return;
-            
-            isPressing = true;
-            startAmbientMusic();
+            e.preventDefault();
+            if (unlocked) return;
             fpBtn.classList.add('pressing');
             scanText.innerText = "Verificando latidos...";
 
-            clearInterval(timer);
             timer = setInterval(() => {
-                progress += 2.5;
+                progress += 2.2;
                 const offset = circumference - (progress / 100) * circumference;
                 ringFill.style.strokeDashoffset = Math.max(offset, 0);
 
@@ -590,4 +448,107 @@
                     scanText.innerText = "Casi listo...";
                 }
 
-         
+                if (progress >= 100) {
+                    clearInterval(timer);
+                    unlocked = true;
+                    fpBtn.classList.remove('pressing');
+                    scanText.innerText = "Bienvenida, amor ♥";
+                    if (navigator.vibrate) navigator.vibrate([60, 40, 100]);
+
+                    setTimeout(() => {
+                        document.getElementById('screen-fingerprint').classList.add('hidden');
+                        document.getElementById('screen-envelope').classList.remove('hidden');
+                    }, 900);
+                }
+            }, 35);
+        }
+
+        function cancelPress() {
+            if (unlocked) return;
+            clearInterval(timer);
+            fpBtn.classList.remove('pressing');
+            progress = 0;
+            ringFill.style.strokeDashoffset = circumference;
+            scanText.innerText = "Mantén presionada la huella ♥";
+        }
+
+        fpBtn.addEventListener('mousedown', startPress);
+        fpBtn.addEventListener('touchstart', startPress, { passive: false });
+        window.addEventListener('mouseup', cancelPress);
+        window.addEventListener('touchend', cancelPress);
+
+        // 3. ABRIR Y CERRAR SOBRE + CONFETI
+        const envelope = document.getElementById('envelope');
+        const letterModal = document.getElementById('letter-modal');
+
+        function openEnvelope() {
+            envelope.classList.add('opened');
+            launchConfetti();
+            setTimeout(() => {
+                letterModal.classList.add('visible');
+            }, 350);
+        }
+
+        function closeEnvelope() {
+            letterModal.classList.remove('visible');
+            setTimeout(() => {
+                envelope.classList.remove('opened');
+            }, 300);
+        }
+
+        // 4. CONFETI SUAVE EN TONOS ROSA/DORADO
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let confettiPieces = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function launchConfetti() {
+            const colors = ['#c93b5b', '#f48fb1', '#f8bbd0', '#e57373', '#d4af37'];
+            confettiPieces = [];
+            for (let i = 0; i < 85; i++) {
+                confettiPieces.push({
+                    x: canvas.width / 2 + (Math.random() - 0.5) * 140,
+                    y: canvas.height / 2,
+                    vx: (Math.random() - 0.5) * 11,
+                    vy: (Math.random() - 1.2) * 11 - 2,
+                    size: Math.random() * 7 + 4,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    rotation: Math.random() * 360,
+                    vRot: (Math.random() - 0.5) * 10
+                });
+            }
+            animateConfetti();
+        }
+
+        function animateConfetti() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let active = false;
+
+            confettiPieces.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.25; // gravedad
+                p.rotation += p.vRot;
+
+                if (p.y < canvas.height + 20) active = true;
+
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate((p.rotation * Math.PI) / 180);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+                ctx.restore();
+            });
+
+            if (active) requestAnimationFrame(animateConfetti);
+        }
+    </script>
+</body>
+</html>
+
