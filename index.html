@@ -2,178 +2,324 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Ti ❤️</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>¿Dudas cuánto me gustas? ❤️</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,500&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Montserrat', sans-serif;
-            background: radial-gradient(circle at top, #1f1118 0%, #0d070a 100%);
-            color: #f8f1f4;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: radial-gradient(circle at 50% 20%, #26101b 0%, #090507 100%);
+            color: #fff;
             overflow-x: hidden;
+            user-select: none;
+            -webkit-user-select: none;
         }
-        .serif {
-            font-family: 'Cormorant Garamond', serif;
-        }
+        .serif { font-family: 'Cormorant Garamond', serif; }
+        
+        /* Efecto cristal */
         .glass {
             background: rgba(255, 255, 255, 0.04);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 192, 203, 0.15);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(244, 63, 94, 0.2);
         }
-        .heart-particle {
-            position: fixed;
-            color: rgba(244, 63, 94, 0.4);
-            pointer-events: none;
-            animation: floatUp linear infinite;
-            z-index: 0;
+
+        /* Animación de pulso para el escáner */
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(244, 63, 94, 0.3); }
+            50% { box-shadow: 0 0 45px rgba(244, 63, 94, 0.7); }
         }
-        @keyframes floatUp {
-            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
-            50% { opacity: 0.7; }
-            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        .scanner-btn {
+            animation: pulseGlow 2s infinite;
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        .fade-in {
-            animation: fadeIn 1.5s ease-out forwards;
+        .scanner-btn:active {
+            transform: scale(0.92);
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        /* Estilo personalizado del slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 28px;
+            width: 28px;
+            border-radius: 50%;
+            background: #f43f5e;
+            cursor: pointer;
+            margin-top: -10px;
+            box-shadow: 0 0 15px rgba(244, 63, 94, 0.8);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 999px;
+        }
+
+        /* Transiciones entre pantallas */
+        .step-section {
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .hidden-step {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .active-step {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Estrella brillante */
+        .star-node {
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .star-node.lit {
+            background-color: #f43f5e;
+            box-shadow: 0 0 20px #f43f5e, 0 0 40px #fb7185;
+            transform: scale(1.3);
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-between p-6 relative">
+<body class="min-h-screen flex flex-col items-center justify-center p-5 relative">
 
-    <!-- Contenedor de partículas -->
-    <div id="particles"></div>
+    <!-- Indicador de progreso superior -->
+    <div class="fixed top-6 left-0 right-0 flex justify-center gap-2 z-20">
+        <div id="dot-1" class="w-8 h-1.5 rounded-full bg-rose-500 transition-all"></div>
+        <div id="dot-2" class="w-8 h-1.5 rounded-full bg-white/20 transition-all"></div>
+        <div id="dot-3" class="w-8 h-1.5 rounded-full bg-white/20 transition-all"></div>
+        <div id="dot-4" class="w-8 h-1.5 rounded-full bg-white/20 transition-all"></div>
+    </div>
 
-    <!-- Encabezado -->
-    <header class="text-center mt-10 z-10 fade-in">
-        <p class="text-xs uppercase tracking-[0.3em] text-rose-300/80 mb-2">Un detalle para ti</p>
-        <h1 class="serif text-5xl md:text-6xl font-semibold text-rose-100">Para mi damisela</h1>
-        <div class="w-16 h-[1px] bg-rose-400/50 mx-auto mt-4"></div>
-    </header>
+    <!-- FASE 1: EL ESCÁNER DE PULSO -->
+    <section id="step-1" class="step-section active-step flex-col items-center text-center max-w-md w-full">
+        <span class="text-xs uppercase tracking-[0.25em] text-rose-400 mb-3">Diagnóstico Rápido</span>
+        <h1 class="serif text-4xl md:text-5xl font-semibold mb-4 leading-tight">¿En serio dudas cuánto me gustas?</h1>
+        <p class="text-sm text-gray-300 mb-10">Pon tu dedo en el corazón y mantenlo presionado para medirlo en tiempo real.</p>
 
-    <!-- Contenido Principal -->
-    <main class="w-full max-w-xl my-10 space-y-8 z-10 fade-in">
-
-        <!-- Contador de tiempo juntos -->
-        <section class="glass rounded-2xl p-6 text-center shadow-2xl">
-            <h2 class="serif italic text-2xl text-rose-200 mb-4">Cada segundo a tu lado cuenta</h2>
-            <div class="grid grid-cols-4 gap-2 text-center" id="timer">
-                <div class="bg-black/30 rounded-xl p-3">
-                    <span id="days" class="block text-2xl md:text-3xl font-semibold text-rose-400">00</span>
-                    <span class="text-[10px] uppercase tracking-wider text-gray-400">Días</span>
-                </div>
-                <div class="bg-black/30 rounded-xl p-3">
-                    <span id="hours" class="block text-2xl md:text-3xl font-semibold text-rose-400">00</span>
-                    <span class="text-[10px] uppercase tracking-wider text-gray-400">Horas</span>
-                </div>
-                <div class="bg-black/30 rounded-xl p-3">
-                    <span id="minutes" class="block text-2xl md:text-3xl font-semibold text-rose-400">00</span>
-                    <span class="text-[10px] uppercase tracking-wider text-gray-400">Min</span>
-                </div>
-                <div class="bg-black/30 rounded-xl p-3">
-                    <span id="seconds" class="block text-2xl md:text-3xl font-semibold text-rose-400">00</span>
-                    <span class="text-[10px] uppercase tracking-wider text-gray-400">Seg</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- Generador de razones -->
-        <section class="glass rounded-2xl p-6 text-center shadow-2xl">
-            <p class="text-xs uppercase tracking-widest text-rose-300/70 mb-3">Lo que me encanta de ti</p>
-            <p id="reason-text" class="serif italic text-2xl text-white min-h-[4rem] flex items-center justify-center px-2">
-                "Tu sonrisa ilumina hasta mis días más pesados."
-            </p>
-            <button onclick="nextReason()" class="mt-4 px-6 py-2.5 rounded-full bg-rose-600/80 hover:bg-rose-500 text-sm font-medium transition-all shadow-lg shadow-rose-900/40 active:scale-95">
-                Ver otra razón ✨
+        <!-- Botón táctil -->
+        <div class="relative flex items-center justify-center mb-6">
+            <svg class="w-44 h-44 -rotate-90">
+                <circle cx="88" cy="88" r="78" stroke="rgba(255,255,255,0.1)" stroke-width="6" fill="transparent" />
+                <circle id="progress-ring" cx="88" cy="88" r="78" stroke="#f43f5e" stroke-width="6" fill="transparent"
+                    stroke-dasharray="490" stroke-dashoffset="490" stroke-linecap="round" />
+            </svg>
+            <button id="hold-btn" 
+                class="scanner-btn absolute w-32 h-32 rounded-full bg-gradient-to-tr from-rose-600 to-pink-500 flex flex-col items-center justify-center shadow-2xl cursor-pointer">
+                <span class="text-4xl mb-1" id="heart-emoji">❤️</span>
+                <span class="text-[10px] uppercase tracking-wider font-semibold" id="hold-label">Mantén aquí</span>
             </button>
-        </section>
+        </div>
 
-        <!-- Carta interactiva -->
-        <section class="glass rounded-2xl p-6 shadow-2xl">
-            <div class="flex justify-between items-center cursor-pointer" onclick="toggleLetter()">
-                <h3 class="serif text-2xl text-rose-200">Una carta para ti...</h3>
-                <span id="letter-icon" class="text-rose-400 text-xl transition-transform duration-300">▼</span>
+        <p id="scan-status" class="text-sm font-medium text-rose-300 h-6">Esperando tu huella...</p>
+    </section>
+
+    <!-- FASE 2: EL MEDIDOR REBELDE -->
+    <section id="step-2" class="step-section hidden-step flex-col items-center text-center max-w-md w-full glass rounded-3xl p-8">
+        <span class="text-xs uppercase tracking-[0.25em] text-rose-400 mb-2">Prueba #2</span>
+        <h2 class="serif text-3xl md:text-4xl mb-3">Calcula el nivel</h2>
+        <p class="text-sm text-gray-300 mb-8">Desliza la barra hasta donde crees que llega lo que siento por ti.</p>
+
+        <div class="w-full mb-4">
+            <div class="flex justify-between text-xs text-gray-400 mb-2">
+                <span>Poquito</span>
+                <span id="slider-val" class="text-rose-400 font-bold text-base">50%</span>
+                <span>Mucho</span>
             </div>
-            <div id="letter-content" class="hidden mt-4 pt-4 border-t border-rose-200/10 text-sm leading-relaxed text-gray-200 space-y-3">
-                <p>Quería hacerte este pequeño rincón en internet solo para recordarte lo importante que eres para mí.</p>
-                <p>Desde que llegaste, todo tiene un brillo distinto. Me encanta cómo eres, tu forma de ver la vida y cada momento que compartimos juntos.</p>
-                <p class="serif italic text-xl text-rose-300 text-right pt-2">Con todo mi cariño, Ángel ❤️</p>
-            </div>
-        </section>
+            <input type="range" id="love-slider" min="0" max="100" value="50" class="w-full">
+        </div>
 
-    </main>
+        <p id="slider-feedback" class="text-sm italic text-rose-200 min-h-[3rem] flex items-center justify-center mb-6">
+            Mueve el círculo... a ver si le atinas.
+        </p>
 
-    <!-- Pie de página -->
-    <footer class="text-center text-xs text-gray-500 z-10 pb-4">
-        Hecho especialmente para ti • 2026
-    </footer>
+        <button id="next-to-3" onclick="goToStep(3)" class="hidden px-6 py-3 rounded-full bg-rose-600 hover:bg-rose-500 text-sm font-semibold transition-all shadow-lg">
+            Ok, te creo... Siguiente →
+        </button>
+    </section>
+
+    <!-- FASE 3: CONECTA LAS RAZONES (ESTRELLAS) -->
+    <section id="step-3" class="step-section hidden-step flex-col items-center text-center max-w-md w-full">
+        <span class="text-xs uppercase tracking-[0.25em] text-rose-400 mb-2">Prueba #3</span>
+        <h2 class="serif text-3xl md:text-4xl mb-2">Enciende cada estrella</h2>
+        <p class="text-sm text-gray-300 mb-6">Toca los 5 puntos para descubrir por qué no sales de mi cabeza.</p>
+
+        <!-- Constelación en forma de corazón -->
+        <div class="relative w-72 h-64 glass rounded-3xl mb-6 flex items-center justify-center">
+            <!-- Líneas SVG decorativas -->
+            <svg class="absolute inset-0 w-full h-full pointer-events-none opacity-30">
+                <polyline points="144,195 65,115 95,55 144,85 193,55 223,115 144,195" fill="none" stroke="#f43f5e" stroke-width="2" stroke-dasharray="4"/>
+            </svg>
+
+            <!-- 5 Estrellas interactivas -->
+            <button onclick="lightStar(0, this)" style="top: 22%; left: 28%;" class="star-node absolute w-9 h-9 rounded-full bg-white/15 border border-rose-300/40 flex items-center justify-center text-xs">✦</button>
+            <button onclick="lightStar(1, this)" style="top: 22%; right: 28%;" class="star-node absolute w-9 h-9 rounded-full bg-white/15 border border-rose-300/40 flex items-center justify-center text-xs">✦</button>
+            <button onclick="lightStar(2, this)" style="top: 45%; left: 16%;" class="star-node absolute w-9 h-9 rounded-full bg-white/15 border border-rose-300/40 flex items-center justify-center text-xs">✦</button>
+            <button onclick="lightStar(3, this)" style="top: 45%; right: 16%;" class="star-node absolute w-9 h-9 rounded-full bg-white/15 border border-rose-300/40 flex items-center justify-center text-xs">✦</button>
+            <button onclick="lightStar(4, this)" style="bottom: 18%; left: 43.5%;" class="star-node absolute w-9 h-9 rounded-full bg-white/15 border border-rose-300/40 flex items-center justify-center text-xs">✦</button>
+        </div>
+
+        <div class="glass rounded-2xl p-4 w-full min-h-[4.5rem] flex items-center justify-center mb-6">
+            <p id="star-message" class="serif italic text-xl text-rose-200">Toca cualquier estrella para empezar...</p>
+        </div>
+
+        <button id="next-to-4" onclick="goToStep(4)" class="hidden px-7 py-3 rounded-full bg-gradient-to-r from-rose-600 to-pink-600 text-sm font-semibold shadow-lg animate-bounce">
+            Ver veredicto final ❤️
+        </button>
+    </section>
+
+    <!-- FASE 4: VEREDICTO FINAL -->
+    <section id="step-4" class="step-section hidden-step flex-col items-center text-center max-w-md w-full glass rounded-3xl p-8">
+        <div class="w-16 h-16 rounded-full bg-rose-500/20 flex items-center justify-center text-3xl mb-4">
+            ✨
+        </div>
+        <span class="text-xs uppercase tracking-[0.25em] text-rose-400 mb-2">Resultado Oficial</span>
+        <h2 class="serif text-4xl font-semibold mb-4">Me encantas, y punto.</h2>
+        
+        <div class="text-sm text-gray-200 space-y-3 leading-relaxed mb-8 text-left bg-black/25 p-5 rounded-2xl border border-white/5">
+            <p>Si algún día vuelves a dudarlo, regresa a este link.</p>
+            <p>Me gustas por cómo eres, por la paz que me das cuando estoy contigo y porque haces que cualquier día normal se sienta increíble.</p>
+            <p class="text-rose-300 font-medium pt-1">No hay porcentaje ni barra que alcance para medirlo.</p>
+        </div>
+
+        <!-- Botón directo a tu WhatsApp -->
+        <a href="https://wa.me/525616083297?text=Ya%20abr%C3%AD%20el%20link...%20y%20t%C3%BA%20tambi%C3%A9n%20me%20gustas%20mucho%20%E2%9D%A4%EF%B8%8F" 
+           target="_blank"
+           class="w-full py-3.5 px-6 rounded-full bg-rose-600 hover:bg-rose-500 text-white font-semibold text-sm transition-all shadow-lg shadow-rose-900/50 flex items-center justify-center gap-2">
+            <span>Ya me quedó claro (Responder)</span>
+            <span>💌</span>
+        </a>
+    </section>
 
     <script>
-        // 1. CONFIGURA AQUÍ TU FECHA DE INICIO (Año, Mes - 1, Día, Hora, Minuto)
-        // Ejemplo: 20 de Agosto de 2026 -> new Date(2026, 7, 20, 0, 0)
-        const startDate = new Date(2026, 7, 20, 0, 0); 
+        // --- NAVEGACIÓN ENTRE FASES ---
+        function goToStep(stepNumber) {
+            document.querySelectorAll('.step-section').forEach(sec => {
+                sec.classList.remove('active-step');
+                sec.classList.add('hidden-step');
+            });
+            const target = document.getElementById(`step-${stepNumber}`);
+            target.classList.remove('hidden-step');
+            setTimeout(() => target.classList.add('active-step'), 20);
 
-        function updateTimer() {
-            const now = new Date();
-            const diff = now - startDate;
-
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-            const minutes = Math.floor((diff / 1000 / 60) % 60);
-            const seconds = Math.floor((diff / 1000) % 60);
-
-            document.getElementById('days').innerText = days >= 0 ? days : 0;
-            document.getElementById('hours').innerText = hours >= 0 ? String(hours).padStart(2, '0') : '00';
-            document.getElementById('minutes').innerText = minutes >= 0 ? String(minutes).padStart(2, '0') : '00';
-            document.getElementById('seconds').innerText = seconds >= 0 ? String(seconds).padStart(2, '0') : '00';
+            // Actualizar puntos superiores
+            for (let i = 1; i <= 4; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                if (i <= stepNumber) {
+                    dot.classList.remove('bg-white/20');
+                    dot.classList.add('bg-rose-500');
+                }
+            }
         }
-        setInterval(updateTimer, 1000);
-        updateTimer();
 
-        // 2. PERSONALIZA AQUÍ TUS FRASES
-        const reasons = [
-            "Tu sonrisa ilumina hasta mis días más pesados.",
-            "La paz que siento cada vez que estoy contigo.",
-            "Cómo me miras y haces que todo lo demás desaparezca.",
-            "Tu forma tan única y especial de ser.",
-            "Cada plática, cada risa y cada momento a tu lado.",
-            "Eres mi persona favorita en todo el mundo."
+        // --- FASE 1: LÓGICA DEL ESCÁNER TÁCTIL ---
+        const holdBtn = document.getElementById('hold-btn');
+        const ring = document.getElementById('progress-ring');
+        const scanStatus = document.getElementById('scan-status');
+        const heartEmoji = document.getElementById('heart-emoji');
+        const circumference = 490;
+        let progress = 0;
+        let holdInterval = null;
+        let scanCompleted = false;
+
+        function startHold(e) {
+            e.preventDefault();
+            if (scanCompleted) return;
+            scanStatus.innerText = "Analizando pulso...";
+            
+            holdInterval = setInterval(() => {
+                progress += 2.5;
+                const offset = circumference - (progress / 100) * circumference;
+                ring.style.strokeDashoffset = Math.max(offset, 0);
+
+                if (progress > 30 && progress < 70) {
+                    scanStatus.innerText = "Detectando nivel alto de cariño...";
+                    heartEmoji.style.transform = "scale(1.15)";
+                } else if (progress >= 70 && progress < 100) {
+                    scanStatus.innerText = "¡Advertencia! Nivel fuera de escala...";
+                    heartEmoji.style.transform = "scale(1.3)";
+                    if (navigator.vibrate) navigator.vibrate(40);
+                } else if (progress >= 100) {
+                    clearInterval(holdInterval);
+                    scanCompleted = true;
+                    scanStatus.innerText = "ERROR: Demasiado para medirlo 💥❤️";
+                    document.getElementById('hold-label').innerText = "¡Listo!";
+                    if (navigator.vibrate) navigator.vibrate([100, 50, 200]);
+                    setTimeout(() => goToStep(2), 1300);
+                }
+            }, 50);
+        }
+
+        function endHold() {
+            if (scanCompleted) return;
+            clearInterval(holdInterval);
+            progress = 0;
+            ring.style.strokeDashoffset = circumference;
+            heartEmoji.style.transform = "scale(1)";
+            scanStatus.innerText = "No lo sueltes hasta que termine...";
+        }
+
+        holdBtn.addEventListener('mousedown', startHold);
+        holdBtn.addEventListener('touchstart', startHold);
+        window.addEventListener('mouseup', endHold);
+        window.addEventListener('touchend', endHold);
+
+        // --- FASE 2: SLIDER REBELDE ---
+        const slider = document.getElementById('love-slider');
+        const sliderVal = document.getElementById('slider-val');
+        const sliderFeedback = document.getElementById('slider-feedback');
+        const nextTo3 = document.getElementById('next-to-3');
+
+        slider.addEventListener('input', () => {
+            const val = parseInt(slider.value);
+            sliderVal.innerText = val + "%";
+
+            if (val < 95) {
+                sliderFeedback.innerText = "¿En serio crees que tan poquito? Sube eso...";
+            } else {
+                // Cuando llega al final, lo desborda a infinito
+                sliderVal.innerText = "∞ %";
+                sliderFeedback.innerText = "¡Exacto! No tiene límite. Ni lo intentes bajar 😉";
+                nextTo3.classList.remove('hidden');
+            }
+        });
+
+        slider.addEventListener('change', () => {
+            // Si intenta soltarlo abajo, se regresa solo al 100%
+            if (parseInt(slider.value) < 95) {
+                setTimeout(() => {
+                    slider.value = 100;
+                    sliderVal.innerText = "∞ %";
+                    sliderFeedback.innerText = "Error de cálculo: el sistema lo corrigió al máximo automático ❤️";
+                    nextTo3.classList.remove('hidden');
+                }, 400);
+            }
+        });
+
+        // --- FASE 3: CONSTELACIÓN DE RAZONES ---
+        const starReasons = [
+            "1. Tu sonrisa es mi parte favorita del día.",
+            "2. Cómo me haces sentir en paz con solo hablar contigo.",
+            "3. Tu forma de ser tan auténtica y especial.",
+            "4. Que incluso en mis días ocupados, pensar en ti me cambia el humor.",
+            "5. Porque contigo todo se siente más bonito."
         ];
-        let currentReason = 0;
+        const litStars = new Set();
 
-        function nextReason() {
-            currentReason = (currentReason + 1) % reasons.length;
-            const el = document.getElementById('reason-text');
-            el.style.opacity = 0;
-            setTimeout(() => {
-                el.innerText = `"${reasons[currentReason]}"`;
-                el.style.opacity = 1;
-            }, 200);
-        }
+        function lightStar(index, btn) {
+            btn.classList.add('lit');
+            btn.innerText = '❤️';
+            litStars.add(index);
+            document.getElementById('star-message').innerText = starReasons[index];
 
-        // 3. ABRIR/CERRAR CARTA
-        function toggleLetter() {
-            const content = document.getElementById('letter-content');
-            const icon = document.getElementById('letter-icon');
-            content.classList.toggle('hidden');
-            icon.style.transform = content.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+            if (litStars.size === 5) {
+                document.getElementById('next-to-4').classList.remove('hidden');
+            }
         }
-
-        // 4. PARTÍCULAS FLOTANTES
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.classList.add('heart-particle');
-            heart.innerHTML = '♥';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.fontSize = (Math.random() * 15 + 10) + 'px';
-            heart.style.animationDuration = (Math.random() * 5 + 6) + 's';
-            document.getElementById('particles').appendChild(heart);
-            setTimeout(() => heart.remove(), 11000);
-        }
-        setInterval(createHeart, 600);
     </script>
 </body>
 </html>
